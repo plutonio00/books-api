@@ -1,0 +1,24 @@
+version: '3.0'
+
+services:
+
+  golang:
+    build:
+      context: ./go
+    container_name: go-books
+    volumes:
+      - ../:/var/www/books-api
+    tty: true
+    working_dir: /var/www/books-api
+    ports:
+      - ${SERVER_PORT}:80
+  mysql:
+    image: mysql/mysql-server:8.0.22
+    container_name: mysql-books
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:3306
