@@ -9,10 +9,11 @@ type Server struct {
 	httpServer *http.Server
 }
 
-func NewServer(conf *config.Config) *Server {
+func NewServer(conf *config.Config, handler http.Handler) *Server {
 	return &Server{
 		httpServer: &http.Server{
 			Addr: ":" + conf.ServerConfig.Port,
+			Handler: handler,
 		},
 	}
 }
