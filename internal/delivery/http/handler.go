@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	v1 "github.com/plutonio00/books-api/internal/delivery/http/v1"
 )
@@ -14,6 +15,7 @@ func NewHandler() *Handler {
 
 func (h *Handler) Init() *mux.Router {
 	router := mux.NewRouter()
+	router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
 	h.initAPI(router)
 	return router
 }
