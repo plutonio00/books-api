@@ -1,15 +1,15 @@
 package mysql
 
 import (
-    "database/sql"
+	"database/sql"
 )
 
 type AuthorsRepo struct {
-    db *sql.DB
+	db *sql.DB
 }
 
 func NewAuthorsRepo(db *sql.DB) *AuthorsRepo {
-    return &AuthorsRepo {
-        db: db,
-    }
+	return &AuthorsRepo{
+		db: db,
+	}
 }

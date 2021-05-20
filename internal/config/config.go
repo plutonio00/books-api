@@ -1,9 +1,11 @@
 package config
 
 import (
-	"github.com/spf13/viper"
-	"strings"
 	"fmt"
+	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
+	"os"
+	"strings"
 )
 
 type (
@@ -32,9 +34,9 @@ func Init(configPath string) (*Config, error) {
 		return nil, err
 	}
 
-		if err := parseEnvFile(); err != nil {
-    		return nil, err
-    	}
+	if err := parseEnvFile(); err != nil {
+		return nil, err
+	}
 
 	var conf Config
 
@@ -54,13 +56,13 @@ func parseConfigFile(filepath string) error {
 	viper.SetConfigName(path[1])
 
 	if err := viper.ReadInConfig(); err != nil {
-    	return err
-    }
+		return err
+	}
 
-    viper.SetConfigName("env")
-    viper.MergeInConfig()
+	viper.SetConfigName("env")
+	viper.MergeInConfig()
 
-    return nil
+	return nil
 }
 
 func unmarshal(cfg *Config) error {
@@ -73,24 +75,13 @@ func unmarshal(cfg *Config) error {
 }
 
 func setFromEnvFile(conf *Config) {
-
-    fmt.Println(viper.GetString("uri"))
-	conf.DatabaseConfig.MySQLConfig.URI = viper.GetString("uri")
+	conf.DatabaseConfig.MySQLConfig.URI = os.Getenv("MYSQL_URI")
 }
 
 func parseEnvFile() error {
 
-	if err := parseMySQLEnvVariables(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func parseMySQLEnvVariables() error {
-	viper.SetEnvPrefix("mysql")
-	if err := viper.BindEnv("uri"); err != nil {
-		return err
+	if err := godotenv.Load(); err != nil {
+		fmt.Print("Error loading .env file")
 	}
 
 	return nil

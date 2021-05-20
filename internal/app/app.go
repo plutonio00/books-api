@@ -7,13 +7,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/plutonio00/books-api/internal/config"
 	delivery "github.com/plutonio00/books-api/internal/delivery/http"
+	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/internal/server"
+	"github.com/plutonio00/books-api/internal/service"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/plutonio00/books-api/internal/repository"
-	"github.com/plutonio00/books-api/internal/service"
 )
 
 func Run(configPath string) {
@@ -38,9 +38,9 @@ func Run(configPath string) {
 
 	repos := repository.NewRepositories(db)
 	services := service.NewServices(
-	    service.Deps {
-	        Repos: repos,
-	    },
+		service.Deps{
+			Repos: repos,
+		},
 	)
 
 	handler := delivery.NewHandler(services)
