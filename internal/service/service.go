@@ -4,9 +4,15 @@ import (
 	"github.com/plutonio00/books-api/internal/repository"
 )
 
+type Books interface {
+}
+
+type Authors interface {
+}
+
 type Services struct {
-	Books   BooksService
-	Authors AuthorsService
+	Books   Books
+	Authors Authors
 }
 
 type Deps struct {

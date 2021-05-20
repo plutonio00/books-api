@@ -8,8 +8,8 @@ type BooksService struct {
 	repo repository.BooksRepo
 }
 
-func NewBooksService(repo repository.BooksRepo) BooksService {
-	return BooksService{
+func NewBooksService(repo repository.BooksRepo) *BooksService {
+	return &BooksService{
 		repo: repo,
 	}
 }
