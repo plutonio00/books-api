@@ -4,13 +4,17 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	v1 "github.com/plutonio00/books-api/internal/delivery/http/v1"
+	"github.com/plutonio00/books-api/internal/service"
 )
 
 type Handler struct {
+	services *service.Services
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(services *service.Services) *Handler {
+	return &Handler{
+		services: services,
+	}
 }
 
 func (h *Handler) Init() *mux.Router {

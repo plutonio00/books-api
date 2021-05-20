@@ -3,7 +3,4 @@ server:
   host: "books-api"
   port: 80
 
-database:
-  #url_template: "go_user:go_pass@tcp(api-mysql:3306)/go_db"
-
 
