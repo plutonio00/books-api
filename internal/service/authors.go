@@ -5,10 +5,10 @@ import (
 )
 
 type AuthorsService struct {
-	repo repository.AuthorsRepo
+	repo repository.Authors
 }
 
-func NewAuthorsService(repo repository.AuthorsRepo) *AuthorsService {
+func NewAuthorsService(repo repository.Authors) *AuthorsService {
 	return &AuthorsService{
 		repo: repo,
 	}

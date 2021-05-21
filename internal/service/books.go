@@ -5,10 +5,10 @@ import (
 )
 
 type BooksService struct {
-	repo repository.BooksRepo
+	repo repository.Books
 }
 
-func NewBooksService(repo repository.BooksRepo) *BooksService {
+func NewBooksService(repo repository.Books) *BooksService {
 	return &BooksService{
 		repo: repo,
 	}

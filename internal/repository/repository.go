@@ -5,15 +5,15 @@ import (
 	mysqlRepos "github.com/plutonio00/books-api/internal/repository/mysql"
 )
 
-type BooksRepo interface {
+type Books interface {
 }
 
-type AuthorsRepo interface {
+type Authors interface {
 }
 
 type Repositories struct {
-	Books   BooksRepo
-	Authors AuthorsRepo
+	Books   Books
+	Authors Authors
 }
 
 func NewRepositories(db *sql.DB) *Repositories {
