@@ -25,7 +25,7 @@ func (h *Handler) Init() *mux.Router {
 }
 
 func (h *Handler) initAPI(router *mux.Router) {
-	handlerV1 := v1.NewHandler()
+	handlerV1 := v1.NewHandler(h.services)
 
 	handlerV1.Init(router)
 }

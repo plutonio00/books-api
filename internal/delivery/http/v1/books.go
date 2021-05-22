@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -20,7 +21,27 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
-	fmt.Print("getBookById")
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	data, err := h.services.Books.FindById(id)
+
+	if err != nil {
+		message, _ := json.Marshal("Error: empty id")
+		jsonResponse(w, http.StatusBadRequest, message)
+		return
+	}
+
+	res, err := json.Marshal(data)
+
+	if err != nil {
+	    fmt.Println(err)
+    	message, _ := json.Marshal("Error: empty id")
+    	jsonResponse(w, http.StatusBadRequest, message)
+    	return
+    }
+
+	jsonResponse(w, http.StatusOK, res)
 }
 
 func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {

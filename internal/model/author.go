@@ -1,7 +1,7 @@
 package model
 
 import (
-	"time"
+	//"time"
 )
 
 type Author struct {
@@ -9,5 +9,5 @@ type Author struct {
 	FirstName string        `json:"first_name"`
 	LastName  string        `json:"last_name"`
 	Gender    bool          `json:"gender"`
-	BirthDate time.Duration `json:"birth_date"`
+	BirthDate []uint8 `json:"birth_date"`
 }

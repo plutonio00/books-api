@@ -2,10 +2,12 @@ package repository
 
 import (
 	"database/sql"
+	"github.com/plutonio00/books-api/internal/model"
 	mysqlRepos "github.com/plutonio00/books-api/internal/repository/mysql"
 )
 
 type Books interface {
+	FindById(id string) (*model.Book, error)
 }
 
 type Authors interface {
