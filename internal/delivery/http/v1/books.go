@@ -27,7 +27,7 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	data, err := h.services.Books.FindById(id)
 
 	if err != nil {
-		message, _ := json.Marshal("Error: empty id")
+		message, _ := json.Marshal(err)
 		jsonResponse(w, http.StatusBadRequest, message)
 		return
 	}

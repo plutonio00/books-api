@@ -28,7 +28,7 @@ func (r *BooksRepo) FindById(id string) (*model.Book, error) {
 		"author_id",
 		"first_name",
 		"last_name",
-		"gender",
+		"is_male",
 		"birth_date",
 	}
 
@@ -44,7 +44,7 @@ func (r *BooksRepo) FindById(id string) (*model.Book, error) {
                &book.Author.Id,
                &book.Author.FirstName,
                &book.Author.LastName,
-               &book.Author.Gender,
+               &book.Author.IsMale,
                &book.Author.BirthDate,
            )
 

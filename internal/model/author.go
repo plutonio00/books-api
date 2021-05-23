@@ -1,13 +1,13 @@
 package model
 
 import (
-	//"time"
+	"time"
 )
 
 type Author struct {
 	Id        int           `json:"id"`
 	FirstName string        `json:"first_name"`
 	LastName  string        `json:"last_name"`
-	Gender    bool          `json:"gender"`
-	BirthDate []uint8 `json:"birth_date"`
+	IsMale    bool          `json:"is_male"`
+	BirthDate time.Time     `json:"birth_date"`
 }
