@@ -18,3 +18,7 @@ func NewBooksService(repo repository.Books) *BooksService {
 func (s *BooksService) FindById(id string) (*model.Book, error) {
 	return s.repo.FindById(id)
 }
+
+func (s *BooksService) GetBooksList() ([]model.Book, error) {
+	return s.repo.GetBooksList()
+}

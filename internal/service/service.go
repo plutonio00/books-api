@@ -7,6 +7,7 @@ import (
 
 type Books interface {
 	FindById(id string) (*model.Book, error)
+	GetBooksList() ([]model.Book, error)
 }
 
 type Authors interface {

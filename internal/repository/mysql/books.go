@@ -19,22 +19,8 @@ func NewBooksRepo(db *sql.DB) *BooksRepo {
 }
 
 func (r *BooksRepo) FindById(id string) (*model.Book, error) {
-	qb := newQueryBuilder()
 
-	selectedParams := []string{
-		"b.id",
-		"title",
-		"release_year",
-		"author_id",
-		"first_name",
-		"last_name",
-		"is_male",
-		"birth_date",
-	}
-
-	qb.Select(selectedParams, r.tableName+" b").InnerJoin("author a", "b.author_id = a.id").Where("b.id")
-
-
+	qb := r.findAllWithAuthors().Where("b.id")
     book := &model.Book{}
 
 	err := r.db.QueryRow(qb.Query, id).Scan(
@@ -48,10 +34,67 @@ func (r *BooksRepo) FindById(id string) (*model.Book, error) {
                &book.Author.BirthDate,
            )
 
-	if err != nil {
+	if err != nil  {
+// 	    if err == sql.ErrNoRows {
+// 	        return nil, repository.ErrBookNotFound
+// 	    }
+
 		fmt.Println(err)
 		return nil, err
 	}
 
 	return book, nil
 }
+
+func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
+    qb := r.findAllWithAuthors()
+    books := []model.Book{}
+    rows, err := r.db.Query(qb.Query)
+
+    if err != nil {
+        fmt.Println(err)
+        return nil, err
+    }
+
+    for rows.Next() {
+        book := model.Book{}
+
+        err := rows.Scan(
+             &book.Id,
+             &book.Title,
+             &book.ReleaseYear,
+             &book.Author.Id,
+             &book.Author.FirstName,
+             &book.Author.LastName,
+             &book.Author.IsMale,
+             &book.Author.BirthDate,
+        )
+
+        if err != nil {
+             fmt.Println(err)
+              return nil, err
+        }
+
+        books = append(books, book)
+    }
+
+    return books, nil
+}
+
+func (r *BooksRepo) findAllWithAuthors() *QueryBuilder {
+    qb := newQueryBuilder()
+
+    selectedParams := []string{
+    	"b.id",
+    	"title",
+    	"release_year",
+    	"author_id",
+    	"first_name",
+    	"last_name",
+    	"is_male",
+    	"birth_date",
+    }
+
+    return qb.Select(selectedParams, r.tableName+" b").InnerJoin("author a", "b.author_id = a.id")
+}
+

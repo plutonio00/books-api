@@ -28,8 +28,8 @@ func (qb *QueryBuilder) Update() {
 
 }
 
-func (qb *QueryBuilder) Delete() {
-
+func (qb *QueryBuilder) Delete(table string) {
+    qb.Query = fmt.Sprintf("DELETE FROM %s", table)
 }
 
 func (qb *QueryBuilder) InnerJoin(joinTable string, onCondition string) *QueryBuilder {
