@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/plutonio00/books-api/internal/model"
 )
 
@@ -38,8 +37,6 @@ func (r *BooksRepo) FindById(id string) (*model.Book, error) {
 		// 	    if err == sql.ErrNoRows {
 		// 	        return nil, repository.ErrBookNotFound
 		// 	    }
-
-		fmt.Println(err)
 		return nil, err
 	}
 
@@ -52,7 +49,6 @@ func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
 	rows, err := r.db.Query(qb.Query)
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
@@ -71,7 +67,6 @@ func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
 		)
 
 		if err != nil {
-			fmt.Println(err)
 			return nil, err
 		}
 
@@ -88,7 +83,6 @@ func (r *BooksRepo) DeleteById(id string) error {
 	_, err := r.db.Exec(qb.Query, id)
 
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
@@ -102,7 +96,6 @@ func (r *BooksRepo) UpdateById(keys []string, values []interface{}) error {
 	_, err := r.db.Exec(qb.Query, values...)
 
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 

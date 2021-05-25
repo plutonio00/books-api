@@ -3,13 +3,13 @@ package app
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/plutonio00/books-api/internal/config"
 	delivery "github.com/plutonio00/books-api/internal/delivery/http"
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/internal/server"
 	"github.com/plutonio00/books-api/internal/service"
+	"github.com/plutonio00/books-api/pkg/logger"
 	"net/http"
 	"os"
 	"os/signal"
@@ -20,19 +20,19 @@ func Run(configPath string) {
 	conf, err := config.Init(configPath)
 
 	if err != nil {
-		fmt.Print(err)
+		logger.Error(err)
 		return
 	}
 
 	db, err := sql.Open("mysql", conf.DatabaseConfig.MySQLConfig.URI)
 
 	if err != nil {
-		fmt.Print(err)
+		logger.Error(err)
 		return
 	}
 
 	if err := db.Ping(); err != nil {
-		fmt.Print(err)
+		logger.Error(err)
 		return
 	}
 
@@ -53,7 +53,7 @@ func Run(configPath string) {
 		}
 	}()
 
-	fmt.Println("server run")
+	logger.Info("server run")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)

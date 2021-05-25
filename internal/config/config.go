@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"os"
@@ -81,7 +80,7 @@ func setFromEnvFile(conf *Config) {
 func parseEnvFile() error {
 
 	if err := godotenv.Load(); err != nil {
-		fmt.Print("Error loading .env file")
+		return err
 	}
 
 	return nil
