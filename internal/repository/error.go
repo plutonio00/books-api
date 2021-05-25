@@ -1,9 +1,9 @@
 package repository
 
 import (
-    "errors"
+	"errors"
 )
 
 var (
-    ErrBookNotFound = errors.New("book doesn't exist")
+	ErrBookNotFound = errors.New("book doesn't exist")
 )

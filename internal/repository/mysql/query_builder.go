@@ -20,16 +20,26 @@ func (qb *QueryBuilder) Select(selected []string, table string) *QueryBuilder {
 	return qb
 }
 
-func (qb *QueryBuilder) Insert() {
+func (qb *QueryBuilder) Insert(table string, params []string) *QueryBuilder {
 
+	var questionsSymbols []string
+	for i := range params {
+		questionsSymbols[i] = "?"
+	}
+
+	qb.Query = fmt.Sprintf("INSERT %s (%s) VALUES (%s)", table, strings.Join(params, ","), strings.Join(questionsSymbols, ","))
+	return qb
 }
 
-func (qb *QueryBuilder) Update() {
-
+func (qb *QueryBuilder) Update(table string, params []string) *QueryBuilder {
+	qb.Query = fmt.Sprintf("UPDATE %s SET %s ", table, strings.Join(params, "= ?,"))
+	qb.Query += "= ? "
+	return qb
 }
 
-func (qb *QueryBuilder) Delete(table string) {
-    qb.Query = fmt.Sprintf("DELETE FROM %s", table)
+func (qb *QueryBuilder) Delete(table string) *QueryBuilder {
+	qb.Query = fmt.Sprintf("DELETE FROM %s ", table)
+	return qb
 }
 
 func (qb *QueryBuilder) InnerJoin(joinTable string, onCondition string) *QueryBuilder {

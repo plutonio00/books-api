@@ -53,7 +53,7 @@ func Run(configPath string) {
 		}
 	}()
 
-	fmt.Print("server run")
+	fmt.Println("server run")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)

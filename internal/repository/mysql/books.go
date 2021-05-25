@@ -21,23 +21,23 @@ func NewBooksRepo(db *sql.DB) *BooksRepo {
 func (r *BooksRepo) FindById(id string) (*model.Book, error) {
 
 	qb := r.findAllWithAuthors().Where("b.id")
-    book := &model.Book{}
+	book := &model.Book{}
 
 	err := r.db.QueryRow(qb.Query, id).Scan(
-               &book.Id,
-               &book.Title,
-               &book.ReleaseYear,
-               &book.Author.Id,
-               &book.Author.FirstName,
-               &book.Author.LastName,
-               &book.Author.IsMale,
-               &book.Author.BirthDate,
-           )
+		&book.Id,
+		&book.Title,
+		&book.ReleaseYear,
+		&book.Author.Id,
+		&book.Author.FirstName,
+		&book.Author.LastName,
+		&book.Author.IsMale,
+		&book.Author.BirthDate,
+	)
 
-	if err != nil  {
-// 	    if err == sql.ErrNoRows {
-// 	        return nil, repository.ErrBookNotFound
-// 	    }
+	if err != nil {
+		// 	    if err == sql.ErrNoRows {
+		// 	        return nil, repository.ErrBookNotFound
+		// 	    }
 
 		fmt.Println(err)
 		return nil, err
@@ -47,54 +47,81 @@ func (r *BooksRepo) FindById(id string) (*model.Book, error) {
 }
 
 func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
-    qb := r.findAllWithAuthors()
-    books := []model.Book{}
-    rows, err := r.db.Query(qb.Query)
+	qb := r.findAllWithAuthors()
+	books := []model.Book{}
+	rows, err := r.db.Query(qb.Query)
 
-    if err != nil {
-        fmt.Println(err)
-        return nil, err
-    }
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
 
-    for rows.Next() {
-        book := model.Book{}
+	for rows.Next() {
+		book := model.Book{}
 
-        err := rows.Scan(
-             &book.Id,
-             &book.Title,
-             &book.ReleaseYear,
-             &book.Author.Id,
-             &book.Author.FirstName,
-             &book.Author.LastName,
-             &book.Author.IsMale,
-             &book.Author.BirthDate,
-        )
+		err := rows.Scan(
+			&book.Id,
+			&book.Title,
+			&book.ReleaseYear,
+			&book.Author.Id,
+			&book.Author.FirstName,
+			&book.Author.LastName,
+			&book.Author.IsMale,
+			&book.Author.BirthDate,
+		)
 
-        if err != nil {
-             fmt.Println(err)
-              return nil, err
-        }
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
 
-        books = append(books, book)
-    }
+		books = append(books, book)
+	}
 
-    return books, nil
+	return books, nil
+}
+
+func (r *BooksRepo) DeleteById(id string) error {
+	qb := newQueryBuilder()
+	qb.Delete(r.tableName).Where("id")
+
+	_, err := r.db.Exec(qb.Query, id)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (r *BooksRepo) UpdateById(keys []string, values []interface{}) error {
+	qb := newQueryBuilder()
+	qb.Update(r.tableName, keys).Where("id")
+
+	_, err := r.db.Exec(qb.Query, values...)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
 }
 
 func (r *BooksRepo) findAllWithAuthors() *QueryBuilder {
-    qb := newQueryBuilder()
+	qb := newQueryBuilder()
 
-    selectedParams := []string{
-    	"b.id",
-    	"title",
-    	"release_year",
-    	"author_id",
-    	"first_name",
-    	"last_name",
-    	"is_male",
-    	"birth_date",
-    }
+	selectedParams := []string{
+		"b.id",
+		"title",
+		"release_year",
+		"author_id",
+		"first_name",
+		"last_name",
+		"is_male",
+		"birth_date",
+	}
 
-    return qb.Select(selectedParams, r.tableName+" b").InnerJoin("author a", "b.author_id = a.id")
+	return qb.Select(selectedParams, r.tableName+" b").InnerJoin("author a", "b.author_id = a.id")
 }
-
