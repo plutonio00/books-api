@@ -3,7 +3,7 @@ package v1
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/plutonio00/books-api/internal/service"
+	api_errors "github.com/plutonio00/books-api/internal/error"
 	"net/http"
 )
 
@@ -20,7 +20,7 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 	data, err := h.services.Books.GetBooksList()
 
 	if err != nil {
-		if err == service.ErrBookNotFound {
+		if err == api_errors.ErrBookNotFound {
 			jsonResponse(w, http.StatusNotFound, err.Error())
 		}
 
@@ -38,7 +38,7 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	data, err := h.services.Books.FindById(id)
 
 	if err != nil {
-		if err == service.ErrBookNotFound {
+		if err == api_errors.ErrBookNotFound {
 			jsonResponse(w, http.StatusNotFound, err.Error())
 		}
 
@@ -73,7 +73,7 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	err := h.services.Books.UpdateById(keys, values)
 
 	if err != nil {
-		if err == service.ErrBookNotFound {
+		if err == api_errors.ErrBookNotFound {
 			jsonResponse(w, http.StatusNotFound, err.Error())
 		}
 
@@ -92,7 +92,7 @@ func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	err := h.services.Books.DeleteById(id)
 
 	if err != nil {
-		if err == service.ErrBookNotFound {
+		if err == api_errors.ErrBookNotFound {
 			jsonResponse(w, http.StatusNotFound, err.Error())
 		}
 

@@ -2,7 +2,7 @@
 build:
 	go build -o ./.bin/app ./cmd/app/main.go
 
-.PHONY: exec
+.PHONY: server_run
 exec:
 	./.bin/app
 
