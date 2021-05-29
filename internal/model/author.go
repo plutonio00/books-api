@@ -9,5 +9,5 @@ type Author struct {
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
 	IsMale    bool      `json:"is_male"`
-	BirthDate time.Time `json:"birth_date"`
+	BirthDate time.Date `json:"birth_date"`
 }

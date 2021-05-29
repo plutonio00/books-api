@@ -6,7 +6,7 @@ CREATE TABLE `author`
     first_name VARCHAR(100) NOT NULL,
     last_name  VARCHAR(100) NOT NULL,
     is_male    TINYINT(1)   NOT NULL,
-    birth_date TIMESTAMP    NOT NULL
+    birth_date DATE    NOT NULL
 );
 -- +goose StatementEnd
 
