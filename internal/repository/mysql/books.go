@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"github.com/plutonio00/books-api/internal/model"
+	// 	"fmt"
 )
 
 type BooksRepo struct {
@@ -89,17 +90,23 @@ func (r *BooksRepo) DeleteById(id string) error {
 	return nil
 }
 
-func (r *BooksRepo) UpdateById(keys []string, values []interface{}) error {
+func (r *BooksRepo) UpdateById(keys []string, values []interface{}) (int64, error) {
 	qb := newQueryBuilder()
 	qb.Update(r.tableName, keys).Where("id")
 
-	_, err := r.db.Exec(qb.Query, values...)
+	result, err := r.db.Exec(qb.Query, values...)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	rowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		return 0, err
+	}
+
+	return rowsAffected, nil
 }
 
 func (r *BooksRepo) findAllWithAuthors() *QueryBuilder {

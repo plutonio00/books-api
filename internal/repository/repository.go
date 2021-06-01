@@ -10,7 +10,7 @@ type Books interface {
 	FindById(id string) (*model.Book, error)
 	GetBooksList() ([]model.Book, error)
 	DeleteById(string) error
-	UpdateById([]string, []interface{}) error
+	UpdateById([]string, []interface{}) (int64, error)
 }
 
 type Authors interface {

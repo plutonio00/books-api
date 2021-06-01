@@ -70,18 +70,19 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	values = append(values, id)
-	err := h.services.Books.UpdateById(keys, values)
+	rowsAffected, err := h.services.Books.UpdateById(keys, values)
+
+	if rowsAffected == 0 {
+		jsonResponse(w, http.StatusNotFound, api_errors.ErrBookNotFound.Error())
+		return
+	}
 
 	if err != nil {
-		if err == api_errors.ErrBookNotFound {
-			jsonResponse(w, http.StatusNotFound, err.Error())
-		}
-
 		jsonResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, fmt.Sprintf("Book with id %s updated", id))
+	jsonResponse(w, http.StatusOK, "Books were updated successfully")
 	return
 }
 
