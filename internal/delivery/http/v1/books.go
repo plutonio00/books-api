@@ -61,13 +61,7 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	keys := make([]string, 0)
-	values := make([]interface{}, 0)
-
-	for key, value := range params {
-		keys = append(keys, key)
-		values = append(values, value[0])
-	}
+	keys, values := h.ParsePostParamsToKeyValueSlices(params)
 
 	values = append(values, id)
 	rowsAffected, err := h.services.Books.UpdateById(keys, values)
