@@ -8,12 +8,12 @@ import (
 )
 
 func (h *Handler) initBooksRoutes(router *mux.Router) {
-	groupEndpoint := h.baseEndpoint + "books/"
+    books := router.PathPrefix(h.baseEndpoint + "books").Subrouter()
 
-	router.HandleFunc(groupEndpoint+"list", h.getBooksList).Methods("GET")
-	router.HandleFunc(groupEndpoint+"{id:[0-9]+}", h.getBookById).Methods("GET")
-	router.HandleFunc(groupEndpoint+"update", h.updateBook).Methods("POST")
-	router.HandleFunc(groupEndpoint+"delete/{id:[0-9]+}", h.deleteBook).Methods("DELETE")
+	books.HandleFunc("/list", h.getBooksList).Methods("GET")
+	books.HandleFunc("/{id:[0-9]+}", h.getBookById).Methods("GET")
+	books.HandleFunc("/update", h.updateBook).Methods("POST")
+	books.HandleFunc("/delete/{id:[0-9]+}", h.deleteBook).Methods("DELETE")
 }
 
 func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
