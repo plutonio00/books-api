@@ -6,7 +6,14 @@ import (
 )
 
 func jsonResponse(w http.ResponseWriter, statusCode int, data interface{}) {
-    responseKey := statusCode < http.StatusBadRequest ? "result" : "error"
+    var responseKey string
+
+    if statusCode < http.StatusBadRequest {
+        responseKey = "result"
+    } else {
+        responseKey = "error"
+    }
+
     data = map[string]interface{}{responseKey: data}
 	message, err := json.Marshal(data)
 	w.Header().Set("Content-Type", "application/json")
