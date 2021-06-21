@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"net/http"
 	"context"
 	"errors"
+	"net/http"
 	"strings"
 )
 
@@ -13,23 +13,23 @@ const (
 
 func (h *Handler) authWithToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        token, err := h.parseAuthHeader(w, r)
+		token, err := h.parseAuthHeader(w, r)
 
-        if err != nil {
-            jsonResponse(w, http.StatusBadRequest, err.Error())
-            return
-        }
+		if err != nil {
+			jsonResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
 
-        id, err := h.tokenManager.Parse(token)
+		id, err := h.tokenManager.Parse(token)
 
-        if err != nil {
-            jsonResponse(w, http.StatusUnauthorized, err.Error())
-            return
-        }
+		if err != nil {
+			jsonResponse(w, http.StatusUnauthorized, err.Error())
+			return
+		}
 
-        ctx := context.WithValue(r.Context(), "user", id)
-        r = r.WithContext(ctx)
-        next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), "user", id)
+		r = r.WithContext(ctx)
+		next.ServeHTTP(w, r)
 	})
 }
 

@@ -3,14 +3,14 @@ package v1
 import (
 	"github.com/gorilla/mux"
 	"github.com/plutonio00/books-api/internal/service"
-	"net/url"
 	"github.com/plutonio00/books-api/pkg/token"
+	"net/url"
 )
 
 type Handler struct {
 	baseEndpoint string
 	services     *service.Services
-	tokenManager   *token.TokenManager
+	tokenManager *token.TokenManager
 }
 
 func NewHandler(services *service.Services, tokenManager *token.TokenManager) *Handler {
