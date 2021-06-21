@@ -1,7 +1,6 @@
 package v1
 
 import (
-	// 	"fmt"
 	"github.com/gorilla/mux"
 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"net/http"
