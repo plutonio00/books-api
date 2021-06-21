@@ -19,10 +19,12 @@
 
 Следующая команда накатит миграции для БД. 
 Для её выполнения следующей нужен параметр MYSQL_URI из файла .env в корне проекта
+
 9. `goose -dir internal/migration mysql "<MYSQL_URI>"  up`
 
 Следующая команда накатит фикстуры (10 авторов + по одной книге для каждого автора). 
-Для её выполнения нужно взять параметры для подключения к базе данных из упоминавшегося на предыдущем шаге параметра MYSQL_URI, который имеет вид <user>:<password>@tcp(<host>:<port>)/<database>?parseTime=true
+Для её выполнения нужно взять параметры для подключения к базе данных из упоминавшегося на предыдущем шаге параметра MYSQL_URI, который имеет вид `<user>:<password>@tcp(<host>:<port>)/<database>?parseTime=true`
+
 10. `charlatan load ./tests/fixtures -u=<user> -d=<database> -p=<password> --host=<host>`
 
 11. `make exec`
