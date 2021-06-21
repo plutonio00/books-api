@@ -7,7 +7,7 @@ import (
 )
 
 type Token struct {
-	AccessToken  string
+	AccessToken string
 }
 
 type Users interface {

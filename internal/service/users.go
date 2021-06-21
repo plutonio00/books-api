@@ -7,14 +7,14 @@ import (
 )
 
 type UsersService struct {
-	repo   repository.Users
+	repo         repository.Users
 	tokenManager *token.TokenManager
 }
 
 func NewUsersService(repo repository.Users, tokenManager *token.TokenManager) *UsersService {
 
 	return &UsersService{
-		repo:   repo,
+		repo:         repo,
 		tokenManager: tokenManager,
 	}
 }
@@ -33,17 +33,17 @@ func (s *UsersService) SignIn(email string, password string) (*Token, error) {
 	user, err := s.repo.GetByEmail(email)
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-    	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-    		return nil, err
-    	}
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		return nil, err
+	}
 
 	token, err := s.tokenManager.CreateJWT(string(user.Id))
 
 	if err != nil {
-    		return nil, err
-    	}
+		return nil, err
+	}
 
 	return &Token{
-        AccessToken: token,
+		AccessToken: token,
 	}, nil
 }

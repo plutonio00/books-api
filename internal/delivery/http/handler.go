@@ -5,15 +5,18 @@ import (
 	"github.com/gorilla/mux"
 	v1 "github.com/plutonio00/books-api/internal/delivery/http/v1"
 	"github.com/plutonio00/books-api/internal/service"
+	"github.com/plutonio00/books-api/pkg/token"
 )
 
 type Handler struct {
 	services *service.Services
+	tokenManager  *token.TokenManager
 }
 
-func NewHandler(services *service.Services) *Handler {
+func NewHandler(services *service.Services, tokenManager *token.TokenManager) *Handler {
 	return &Handler{
 		services: services,
+		tokenManager: tokenManager,
 	}
 }
 
@@ -25,7 +28,6 @@ func (h *Handler) Init() *mux.Router {
 }
 
 func (h *Handler) initAPI(router *mux.Router) {
-	handlerV1 := v1.NewHandler(h.services)
-
+	handlerV1 := v1.NewHandler(h.services, h.tokenManager)
 	handlerV1.Init(router)
 }

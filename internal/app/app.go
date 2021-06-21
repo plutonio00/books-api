@@ -9,12 +9,12 @@ import (
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/internal/server"
 	"github.com/plutonio00/books-api/internal/service"
+	"github.com/plutonio00/books-api/pkg/token"
 	logger "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/plutonio00/books-api/pkg/token"
 )
 
 func Run(configPath string) {
@@ -52,7 +52,7 @@ func Run(configPath string) {
 		},
 	)
 
-	handler := delivery.NewHandler(services)
+	handler := delivery.NewHandler(services, tokenManager)
 
 	srv := server.NewServer(conf, handler.Init())
 

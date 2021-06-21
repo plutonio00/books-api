@@ -4,17 +4,20 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/plutonio00/books-api/internal/service"
 	"net/url"
+	"github.com/plutonio00/books-api/pkg/token"
 )
 
 type Handler struct {
 	baseEndpoint string
 	services     *service.Services
+	tokenManager   *token.TokenManager
 }
 
-func NewHandler(services *service.Services) *Handler {
+func NewHandler(services *service.Services, tokenManager *token.TokenManager) *Handler {
 	return &Handler{
 		baseEndpoint: "/api/v1/",
 		services:     services,
+		tokenManager: tokenManager,
 	}
 }
 

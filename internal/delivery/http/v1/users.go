@@ -1,17 +1,17 @@
 package v1
 
 import (
-// 	"fmt"
+	// 	"fmt"
 	"github.com/gorilla/mux"
 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"net/http"
 )
 
 func (h *Handler) initUsersRoutes(router *mux.Router) {
-	users := router.PathPrefix(h.baseEndpoint + "users").Subrouter()
+	usersRouter := router.PathPrefix(h.baseEndpoint + "users").Subrouter()
 
-	users.HandleFunc("/sign-up", h.SignUp).Methods("POST")
-	users.HandleFunc("/sign-in", h.SignIn).Methods("POST")
+	usersRouter.HandleFunc("/sign-up", h.SignUp).Methods("POST")
+	usersRouter.HandleFunc("/sign-in", h.SignIn).Methods("POST")
 }
 
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {

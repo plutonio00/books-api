@@ -33,7 +33,7 @@ type (
 	}
 
 	JWTConfig struct {
-		SigningKey      string
+		SigningKey string
 	}
 )
 

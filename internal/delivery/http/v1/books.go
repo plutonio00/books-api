@@ -8,12 +8,12 @@ import (
 )
 
 func (h *Handler) initBooksRoutes(router *mux.Router) {
-	books := router.PathPrefix(h.baseEndpoint + "books").Subrouter()
-
-	books.HandleFunc("/list", h.getBooksList).Methods("GET")
-	books.HandleFunc("/{id:[0-9]+}", h.getBookById).Methods("GET")
-	books.HandleFunc("/update", h.updateBook).Methods("POST")
-	books.HandleFunc("/delete/{id:[0-9]+}", h.deleteBook).Methods("DELETE")
+	booksRouter := router.PathPrefix(h.baseEndpoint + "books").Subrouter()
+	booksRouter.Use(h.authWithToken)
+	booksRouter.HandleFunc("/list", h.getBooksList).Methods("GET")
+	booksRouter.HandleFunc("/{id:[0-9]+}", h.getBookById).Methods("GET")
+	booksRouter.HandleFunc("/update", h.updateBook).Methods("POST")
+	booksRouter.HandleFunc("/delete/{id:[0-9]+}", h.deleteBook).Methods("DELETE")
 }
 
 func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +22,7 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
 			jsonResponse(w, http.StatusNotFound, err.Error())
+			return
 		}
 
 		jsonResponse(w, http.StatusInternalServerError, err.Error())
