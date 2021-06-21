@@ -23,11 +23,11 @@ func (qb *QueryBuilder) Select(selected []string, table string) *QueryBuilder {
 func (qb *QueryBuilder) Insert(table string, params []string) *QueryBuilder {
 
 	var questionsSymbols []string
-	for i := range params {
-		questionsSymbols[i] = "?"
+	for range params {
+		questionsSymbols = append(questionsSymbols, "?")
 	}
 
-	qb.Query = fmt.Sprintf("INSERT %s (%s) VALUES (%s)", table, strings.Join(params, ","), strings.Join(questionsSymbols, ","))
+	qb.Query = fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", table, strings.Join(params, ","), strings.Join(questionsSymbols, ","))
 	return qb
 }
 
@@ -49,5 +49,10 @@ func (qb *QueryBuilder) InnerJoin(joinTable string, onCondition string) *QueryBu
 
 func (qb *QueryBuilder) Where(param string) *QueryBuilder {
 	qb.Query += fmt.Sprintf("WHERE %s = ?", param)
+	return qb
+}
+
+func (qb *QueryBuilder) AndWhere(param string) *QueryBuilder {
+	qb.Query += fmt.Sprintf(" AND %s = ?", param)
 	return qb
 }

@@ -9,8 +9,9 @@ import (
 
 type (
 	Config struct {
-		ServerConfig   ServerConfig
-		DatabaseConfig DatabaseConfig
+		Server   ServerConfig
+		Database DatabaseConfig
+		Token    TokenConfig
 	}
 
 	ServerConfig struct {
@@ -19,11 +20,20 @@ type (
 	}
 
 	DatabaseConfig struct {
-		MySQLConfig MySQLConfig
+		MySQL MySQLConfig
 	}
 
 	MySQLConfig struct {
 		URI string
+	}
+
+	TokenConfig struct {
+		JWT                    JWTConfig
+		VerificationCodeLength int `mapstructure:"verificationCodeLength"`
+	}
+
+	JWTConfig struct {
+		SigningKey      string
 	}
 )
 
@@ -66,7 +76,11 @@ func parseConfigFile(filepath string) error {
 
 func unmarshal(cfg *Config) error {
 
-	if err := viper.UnmarshalKey("server", &cfg.ServerConfig); err != nil {
+	if err := viper.UnmarshalKey("server", &cfg.Server); err != nil {
+		return err
+	}
+
+	if err := viper.UnmarshalKey("token", &cfg.Token); err != nil {
 		return err
 	}
 
@@ -74,7 +88,8 @@ func unmarshal(cfg *Config) error {
 }
 
 func setFromEnvFile(conf *Config) {
-	conf.DatabaseConfig.MySQLConfig.URI = os.Getenv("MYSQL_URI")
+	conf.Database.MySQL.URI = os.Getenv("MYSQL_URI")
+	conf.Token.JWT.SigningKey = os.Getenv("JWT_SIGNING_KEY")
 }
 
 func parseEnvFile() error {

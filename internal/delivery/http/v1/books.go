@@ -8,7 +8,7 @@ import (
 )
 
 func (h *Handler) initBooksRoutes(router *mux.Router) {
-    books := router.PathPrefix(h.baseEndpoint + "books").Subrouter()
+	books := router.PathPrefix(h.baseEndpoint + "books").Subrouter()
 
 	books.HandleFunc("/list", h.getBooksList).Methods("GET")
 	books.HandleFunc("/{id:[0-9]+}", h.getBookById).Methods("GET")

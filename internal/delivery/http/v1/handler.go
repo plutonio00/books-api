@@ -20,17 +20,17 @@ func NewHandler(services *service.Services) *Handler {
 
 func (h *Handler) Init(router *mux.Router) {
 	h.initBooksRoutes(router)
-	//     h.initAuthorsRoutes(router)
+	h.initUsersRoutes(router)
 }
 
 func (h *Handler) ParsePostParamsToKeyValueSlices(params url.Values) ([]string, []interface{}) {
-    keys := make([]string, 0)
-    values := make([]interface{}, 0)
+	keys := make([]string, 0)
+	values := make([]interface{}, 0)
 
-    for key, value := range params {
-    	keys = append(keys, key)
-    	values = append(values, value[0])
-    }
+	for key, value := range params {
+		keys = append(keys, key)
+		values = append(values, value[0])
+	}
 
-    return keys, values
+	return keys, values
 }

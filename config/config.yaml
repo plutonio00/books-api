@@ -3,4 +3,7 @@ server:
   host: "books-api"
   port: 80
 
+token:
+  verificationCodeLength: 8
+
 

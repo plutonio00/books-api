@@ -9,11 +9,12 @@ import (
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/internal/server"
 	"github.com/plutonio00/books-api/internal/service"
-	"github.com/plutonio00/books-api/pkg/logger"
+	logger "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"github.com/plutonio00/books-api/pkg/token"
 )
 
 func Run(configPath string) {
@@ -24,7 +25,7 @@ func Run(configPath string) {
 		return
 	}
 
-	db, err := sql.Open("mysql", conf.DatabaseConfig.MySQLConfig.URI)
+	db, err := sql.Open("mysql", conf.Database.MySQL.URI)
 
 	if err != nil {
 		logger.Error(err)
@@ -37,9 +38,17 @@ func Run(configPath string) {
 	}
 
 	repos := repository.NewRepositories(db)
+
+	tokenManager, err := token.NewTokenManager(conf.Token.JWT.SigningKey)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
 	services := service.NewServices(
 		service.Deps{
-			Repos: repos,
+			Repos:        repos,
+			TokenManager: tokenManager,
 		},
 	)
 
