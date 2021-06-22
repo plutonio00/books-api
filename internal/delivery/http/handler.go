@@ -5,7 +5,10 @@ import (
 	"github.com/gorilla/mux"
 	v1 "github.com/plutonio00/books-api/internal/delivery/http/v1"
 	"github.com/plutonio00/books-api/internal/service"
+	"github.com/plutonio00/books-api/internal/config"
 	"github.com/plutonio00/books-api/pkg/token"
+    "github.com/swaggo/http-swagger"
+    _ "github.com/plutonio00/books-api/docs"
 )
 
 type Handler struct {
@@ -20,9 +23,12 @@ func NewHandler(services *service.Services, tokenManager *token.TokenManager) *H
 	}
 }
 
-func (h *Handler) Init() *mux.Router {
+func (h *Handler) Init(conf *config.Config) *mux.Router {
 	router := mux.NewRouter()
 	router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
+
+	router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+
 	h.initAPI(router)
 	return router
 }

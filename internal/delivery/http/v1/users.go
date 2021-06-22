@@ -13,6 +13,16 @@ func (h *Handler) initUsersRoutes(router *mux.Router) {
 	usersRouter.HandleFunc("/sign-in", h.SignIn).Methods("POST")
 }
 
+// @Summary User signup
+// @Tags users-auth
+// @Produce json
+// @Param email path string true "dvfsfsf"
+// @Param password path string true "dvfsfsf"
+// @Success 200 {object} service.Token
+// @Failure 400,404 {json} json
+// @Failure 500 {json} json
+// @Failure default {json} json
+// @Router /users/sign-in [post]
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	email := r.Form.Get("email")

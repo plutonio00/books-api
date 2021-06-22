@@ -1,0 +1,59 @@
+basePath: /api/v1/
+definitions:
+  service.Token:
+    properties:
+      accessToken:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: API Server
+  title: Books & Authors API
+  version: "1.0"
+paths:
+  /users/sign-in:
+    post:
+      parameters:
+      - description: dvfsfsf
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: dvfsfsf
+        in: path
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.Token'
+        "400":
+          description: Bad Request
+          schema:
+            type: json
+        "404":
+          description: Bad Request
+          schema:
+            type: json
+        "500":
+          description: Internal Server Error
+          schema:
+            type: json
+        default:
+          description: ""
+          schema:
+            type: json
+      summary: User signup
+      tags:
+      - users-auth
+securityDefinitions:
+  Books:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
