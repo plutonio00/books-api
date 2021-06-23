@@ -17,18 +17,6 @@ import (
 	"syscall"
 )
 
-// @title Books & Authors API
-// @version 1.0
-// @description API Server
-
-// @host 127.0.0.1:8080
-// @BasePath /api/v1/
-
-// @securityDefinitions.apikey Books
-// @in header
-// @name Authorization
-
-// Run initializes whole application
 func Run(configPath string) {
 	conf, err := config.Init(configPath)
 

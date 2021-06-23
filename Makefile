@@ -6,7 +6,7 @@ exec:
 	./.bin/app
 
 swag:
-	swag init -g internal/app/app.go
+	swag init -g cmd/app/main.go
 
 .DEFAULT_GOAL := build
 

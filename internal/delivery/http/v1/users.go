@@ -13,15 +13,16 @@ func (h *Handler) initUsersRoutes(router *mux.Router) {
 	usersRouter.HandleFunc("/sign-in", h.SignIn).Methods("POST")
 }
 
-// @Summary User signup
-// @Tags users-auth
+// @Summary User sign in
+// @Tags users
+// @Description endpoint for user sign in
 // @Produce json
-// @Param email path string true "dvfsfsf"
-// @Param password path string true "dvfsfsf"
-// @Success 200 {object} service.Token
-// @Failure 400,404 {json} json
-// @Failure 500 {json} json
-// @Failure default {json} json
+// @Param email formData string true "User's email"
+// @Param password formData string true "User's password"
+// @Success 200 {object} ApiResponse{result=service.Token}
+// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 500 {object} ApiResponse{result=string}
+// @Failure default {object} ApiResponse{result=string}
 // @Router /users/sign-in [post]
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
@@ -44,6 +45,17 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Summary User sign up
+// @Tags users
+// @Description endpoint for user sign up
+// @Produce json
+// @Param email formData string true "User's email"
+// @Param password formData string true "User's password"
+// @Success 200 {object} ApiResponse{result=string}
+// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 500 {object} ApiResponse{result=string}
+// @Failure default {object} ApiResponse{result=string}
+// @Router /users/sign-up [post]
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	email := r.Form.Get("email")

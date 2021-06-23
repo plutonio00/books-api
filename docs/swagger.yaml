@@ -1,27 +1,323 @@
 basePath: /api/v1/
 definitions:
+  model.Author:
+    properties:
+      birth_date:
+        example: "1948-09-20"
+        type: string
+      first_name:
+        example: George
+        type: string
+      id:
+        example: 10
+        type: integer
+      is_male:
+        example: true
+        type: boolean
+      last_name:
+        example: Martin
+        type: string
+    type: object
+  model.Book:
+    properties:
+      author:
+        $ref: '#/definitions/model.Author'
+      id:
+        example: 1
+        type: integer
+      release_year:
+        example: 1997
+        type: integer
+      title:
+        example: Games of thrones
+        type: string
+    type: object
   service.Token:
     properties:
       accessToken:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJcdTAwMDEifQ.O3Lp6-VLUmGrcHUO11b2LqUBXq-tQeyRTWxwAe6aNLQ
+        type: string
+    type: object
+  v1.ApiResponse:
+    properties:
+      result:
+        type: object
+      status:
         type: string
     type: object
 host: 127.0.0.1:8080
 info:
   contact: {}
-  description: API Server
   title: Books & Authors API
   version: "1.0"
 paths:
+  /books/{id}:
+    get:
+      description: endpoint for getting book by id
+      parameters:
+      - description: Book's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/model.Book'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "404":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        default:
+          description: ""
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+      security:
+      - ApiTokenAuth: []
+      summary: Books by id
+      tags:
+      - books
+  /books/delete/{id}:
+    delete:
+      description: endpoint for delete book by id
+      parameters:
+      - description: Book's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "404":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        default:
+          description: ""
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+      security:
+      - ApiTokenAuth: []
+      summary: Delete book by id
+      tags:
+      - books
+  /books/list:
+    get:
+      description: endpoint for getting all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/model.Book'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "404":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        default:
+          description: ""
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+      security:
+      - ApiTokenAuth: []
+      summary: Books list
+      tags:
+      - books
+  /books/update:
+    post:
+      description: endpoint for update book by id
+      parameters:
+      - description: Book's id
+        in: formData
+        name: id
+        required: true
+        type: integer
+      - description: Book's title
+        in: formData
+        name: title
+        type: string
+      - description: Book's release year
+        in: formData
+        name: release_year
+        type: integer
+      - description: Book's author
+        in: formData
+        name: author_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "404":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        default:
+          description: ""
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+      security:
+      - ApiTokenAuth: []
+      summary: Update book by id
+      tags:
+      - books
   /users/sign-in:
     post:
+      description: endpoint for user sign in
       parameters:
-      - description: dvfsfsf
-        in: path
+      - description: User's email
+        in: formData
         name: email
         required: true
         type: string
-      - description: dvfsfsf
-        in: path
+      - description: User's password
+        in: formData
         name: password
         required: true
         type: string
@@ -31,28 +327,118 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/service.Token'
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/service.Token'
+              type: object
         "400":
           description: Bad Request
           schema:
-            type: json
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
         "404":
           description: Bad Request
           schema:
-            type: json
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
         "500":
           description: Internal Server Error
           schema:
-            type: json
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
         default:
           description: ""
           schema:
-            type: json
-      summary: User signup
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+      summary: User sign in
       tags:
-      - users-auth
+      - users
+  /users/sign-up:
+    post:
+      description: endpoint for user sign up
+      parameters:
+      - description: User's email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: User's password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "404":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        default:
+          description: ""
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.ApiResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+      summary: User sign up
+      tags:
+      - users
 securityDefinitions:
-  Books:
+  ApiTokenAuth:
     in: header
     name: Authorization
     type: apiKey

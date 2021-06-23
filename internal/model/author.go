@@ -5,9 +5,9 @@ import (
 )
 
 type Author struct {
-	Id        int       `json:"id"`
-	FirstName string    `json:"first_name"`
-	LastName  string    `json:"last_name"`
-	IsMale    bool      `json:"is_male"`
-	BirthDate time.Time `json:"birth_date"`
+	Id        int       `json:"id" example:"10"`
+	FirstName string    `json:"first_name" example:"George"`
+	LastName  string    `json:"last_name" example:"Martin"`
+	IsMale    bool      `json:"is_male" example:"true"`
+	BirthDate time.Time `json:"birth_date" example:"1948-09-20"`
 }

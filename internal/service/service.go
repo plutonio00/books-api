@@ -7,7 +7,7 @@ import (
 )
 
 type Token struct {
-	AccessToken string
+	AccessToken string `example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJcdTAwMDEifQ.O3Lp6-VLUmGrcHUO11b2LqUBXq-tQeyRTWxwAe6aNLQ"`
 }
 
 type Users interface {

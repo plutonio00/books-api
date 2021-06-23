@@ -5,17 +5,22 @@ import (
 	"net/http"
 )
 
+type ApiResponse struct {
+    Status string `json:"status"`
+    Result interface{} `json:"result"`
+}
+
 func jsonResponse(w http.ResponseWriter, statusCode int, data interface{}) {
-    var responseKey string
+    apiResponse := ApiResponse{}
 
     if statusCode < http.StatusBadRequest {
-        responseKey = "result"
+        apiResponse.Status = "success"
     } else {
-        responseKey = "error"
+        apiResponse.Status = "error"
     }
 
-    data = map[string]interface{}{responseKey: data}
-	message, err := json.Marshal(data)
+    apiResponse.Result = data
+	message, err := json.Marshal(apiResponse)
 	w.Header().Set("Content-Type", "application/json")
 
 	if err != nil {

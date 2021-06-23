@@ -16,6 +16,16 @@ func (h *Handler) initBooksRoutes(router *mux.Router) {
 	booksRouter.HandleFunc("/delete/{id:[0-9]+}", h.deleteBook).Methods("DELETE")
 }
 
+// @Summary Books list
+// @Tags books
+// @Description endpoint for getting all books
+// @Produce json
+// @Security ApiTokenAuth
+// @Success 200 {object} ApiResponse{result=[]model.Book}
+// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 500 {object} ApiResponse{result=string}
+// @Failure default {object} ApiResponse{result=string}
+// @Router /books/list [get]
 func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 	data, err := h.services.Books.GetBooksList()
 
@@ -32,6 +42,17 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, http.StatusOK, data)
 }
 
+// @Summary Books by id
+// @Tags books
+// @Description endpoint for getting book by id
+// @Produce json
+// @Security ApiTokenAuth
+// @Param id path integer true "Book's id"
+// @Success 200 {object} ApiResponse{result=model.Book}
+// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 500 {object} ApiResponse{result=string}
+// @Failure default {object} ApiResponse{result=string}
+// @Router /books/{id} [get]
 func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -51,6 +72,20 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Summary Update book by id
+// @Tags books
+// @Description endpoint for update book by id
+// @Produce json
+// @Security ApiTokenAuth
+// @Param id formData integer true "Book's id"
+// @Param title formData string false "Book's title"
+// @Param release_year formData integer false "Book's release year"
+// @Param author_id formData integer false "Book's author"
+// @Success 200 {object} ApiResponse{result=string}
+// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 500 {object} ApiResponse{result=string}
+// @Failure default {object} ApiResponse{result=string}
+// @Router /books/update [post]
 func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	params := r.Form
@@ -67,13 +102,13 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	values = append(values, id)
 	rowsAffected, err := h.services.Books.UpdateById(keys, values)
 
+	if err != nil {
+    		jsonResponse(w, http.StatusInternalServerError, err.Error())
+    		return
+    	}
+
 	if rowsAffected == 0 {
 		jsonResponse(w, http.StatusNotFound, api_errors.ErrBookNotFound.Error())
-		return
-	}
-
-	if err != nil {
-		jsonResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -81,6 +116,17 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Summary Delete book by id
+// @Tags books
+// @Description endpoint for delete book by id
+// @Produce json
+// @Security ApiTokenAuth
+// @Param id path integer true "Book's id"
+// @Success 200 {object} ApiResponse{result=string}
+// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 500 {object} ApiResponse{result=string}
+// @Failure default {object} ApiResponse{result=string}
+// @Router /books/delete/{id} [delete]
 func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
