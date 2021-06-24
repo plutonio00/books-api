@@ -20,7 +20,8 @@ func (h *Handler) initUsersRoutes(router *mux.Router) {
 // @Param email formData string true "User's email"
 // @Param password formData string true "User's password"
 // @Success 200 {object} ApiResponse{result=service.Token}
-// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 400 {object} ApiResponse{result=string}
+// @Failure 404 {object} ApiResponse{result=string}
 // @Failure 500 {object} ApiResponse{result=string}
 // @Failure default {object} ApiResponse{result=string}
 // @Router /users/sign-in [post]
@@ -30,7 +31,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 
 	if email == "" || password == "" {
-		jsonResponse(w, http.StatusBadRequest, api_errors.ErrInvalidCredentials.Error())
+		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
 		return
 	}
 
@@ -52,7 +53,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 // @Param email formData string true "User's email"
 // @Param password formData string true "User's password"
 // @Success 200 {object} ApiResponse{result=string}
-// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 400 {object} ApiResponse{result=string}
 // @Failure 500 {object} ApiResponse{result=string}
 // @Failure default {object} ApiResponse{result=string}
 // @Router /users/sign-up [post]
@@ -62,7 +63,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 
 	if email == "" || password == "" {
-		jsonResponse(w, http.StatusBadRequest, api_errors.ErrInvalidCredentials.Error())
+		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
 		return
 	}
 

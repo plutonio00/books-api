@@ -3,12 +3,12 @@ package http
 import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	_ "github.com/plutonio00/books-api/docs"
+	"github.com/plutonio00/books-api/internal/config"
 	v1 "github.com/plutonio00/books-api/internal/delivery/http/v1"
 	"github.com/plutonio00/books-api/internal/service"
-	"github.com/plutonio00/books-api/internal/config"
 	"github.com/plutonio00/books-api/pkg/token"
-    "github.com/swaggo/http-swagger"
-    _ "github.com/plutonio00/books-api/docs"
+	"github.com/swaggo/http-swagger"
 )
 
 type Handler struct {

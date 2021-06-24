@@ -27,6 +27,6 @@ func (s *BooksService) DeleteById(id string) error {
 	return s.repo.DeleteById(id)
 }
 
-func (s *BooksService) UpdateById(keys []string, values []interface{}) (int64, error) {
+func (s *BooksService) UpdateById(keys []string, values []interface{}) error {
 	return s.repo.UpdateById(keys, values)
 }

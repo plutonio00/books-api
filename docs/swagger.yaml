@@ -82,7 +82,7 @@ paths:
                   type: string
               type: object
         "404":
-          description: Bad Request
+          description: Not Found
           schema:
             allOf:
             - $ref: '#/definitions/v1.ApiResponse'
@@ -144,7 +144,7 @@ paths:
                   type: string
               type: object
         "404":
-          description: Bad Request
+          description: Not Found
           schema:
             allOf:
             - $ref: '#/definitions/v1.ApiResponse'
@@ -193,15 +193,6 @@ paths:
                   type: array
               type: object
         "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/v1.ApiResponse'
-            - properties:
-                result:
-                  type: string
-              type: object
-        "404":
           description: Bad Request
           schema:
             allOf:
@@ -276,7 +267,7 @@ paths:
                   type: string
               type: object
         "404":
-          description: Bad Request
+          description: Not Found
           schema:
             allOf:
             - $ref: '#/definitions/v1.ApiResponse'
@@ -343,7 +334,7 @@ paths:
                   type: string
               type: object
         "404":
-          description: Bad Request
+          description: Not Found
           schema:
             allOf:
             - $ref: '#/definitions/v1.ApiResponse'
@@ -399,15 +390,6 @@ paths:
                   type: string
               type: object
         "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/v1.ApiResponse'
-            - properties:
-                result:
-                  type: string
-              type: object
-        "404":
           description: Bad Request
           schema:
             allOf:

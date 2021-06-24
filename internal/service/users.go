@@ -1,6 +1,7 @@
 package service
 
 import (
+	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/pkg/token"
 	"golang.org/x/crypto/bcrypt"
@@ -32,9 +33,13 @@ func (s *UsersService) SignUp(email string, password string) error {
 func (s *UsersService) SignIn(email string, password string) (*Token, error) {
 	user, err := s.repo.GetByEmail(email)
 
+	if err != nil {
+		return nil, api_errors.ErrInvalidCredentials
+	}
+
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return nil, err
+		return nil, api_errors.ErrInvalidCredentials
 	}
 
 	token, err := s.tokenManager.CreateJWT(string(user.Id))

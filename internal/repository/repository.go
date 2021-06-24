@@ -8,7 +8,6 @@ import (
 
 type Users interface {
 	Create(string, string) error
-	//     SetToken()
 	GetByEmail(string) (*model.User, error)
 }
 
@@ -16,7 +15,7 @@ type Books interface {
 	FindById(id string) (*model.Book, error)
 	GetBooksList() ([]model.Book, error)
 	DeleteById(string) error
-	UpdateById([]string, []interface{}) (int64, error)
+	UpdateById([]string, []interface{}) error
 }
 
 type Authors interface {

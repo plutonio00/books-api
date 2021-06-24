@@ -6,20 +6,20 @@ import (
 )
 
 type ApiResponse struct {
-    Status string `json:"status"`
-    Result interface{} `json:"result"`
+	Status string      `json:"status"`
+	Result interface{} `json:"result"`
 }
 
 func jsonResponse(w http.ResponseWriter, statusCode int, data interface{}) {
-    apiResponse := ApiResponse{}
+	apiResponse := ApiResponse{}
 
-    if statusCode < http.StatusBadRequest {
-        apiResponse.Status = "success"
-    } else {
-        apiResponse.Status = "error"
-    }
+	if statusCode < http.StatusBadRequest {
+		apiResponse.Status = "success"
+	} else {
+		apiResponse.Status = "error"
+	}
 
-    apiResponse.Result = data
+	apiResponse.Result = data
 	message, err := json.Marshal(apiResponse)
 	w.Header().Set("Content-Type", "application/json")
 

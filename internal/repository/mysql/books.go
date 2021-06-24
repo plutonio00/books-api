@@ -2,8 +2,9 @@ package mysql
 
 import (
 	"database/sql"
+	mysql_driver "github.com/go-sql-driver/mysql"
+	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/plutonio00/books-api/internal/model"
-	// 	"fmt"
 )
 
 type BooksRepo struct {
@@ -35,9 +36,10 @@ func (r *BooksRepo) FindById(id string) (*model.Book, error) {
 	)
 
 	if err != nil {
-		// 	    if err == sql.ErrNoRows {
-		// 	        return nil, repository.ErrBookNotFound
-		// 	    }
+		if err == sql.ErrNoRows {
+			err = api_errors.ErrBookNotFound
+		}
+
 		return nil, err
 	}
 
@@ -81,32 +83,44 @@ func (r *BooksRepo) DeleteById(id string) error {
 	qb := newQueryBuilder()
 	qb.Delete(r.tableName).Where("id")
 
-	_, err := r.db.Exec(qb.Query, id)
+	result, err := r.db.Exec(qb.Query, id)
 
 	if err != nil {
 		return err
 	}
 
+	rowsAffected, _ := result.RowsAffected()
+
+	if rowsAffected == 0 {
+		return api_errors.ErrBookNotFound
+	}
+
 	return nil
 }
 
-func (r *BooksRepo) UpdateById(keys []string, values []interface{}) (int64, error) {
+func (r *BooksRepo) UpdateById(keys []string, values []interface{}) error {
 	qb := newQueryBuilder()
 	qb.Update(r.tableName, keys).Where("id")
 
 	result, err := r.db.Exec(qb.Query, values...)
 
 	if err != nil {
-		return 0, err
+		if driverErr, ok := err.(*mysql_driver.MySQLError); ok {
+			if driverErr.Number == foreignKeyConstraintFails {
+				err = api_errors.ErrInvalidAuthorId
+			}
+		}
+
+		return err
 	}
 
-	rowsAffected, err := result.RowsAffected()
+	rowsAffected, _ := result.RowsAffected()
 
-	if err != nil {
-		return 0, err
+	if rowsAffected == 0 {
+		return api_errors.ErrBookNotFound
 	}
 
-	return rowsAffected, nil
+	return nil
 }
 
 func (r *BooksRepo) findAllWithAuthors() *QueryBuilder {

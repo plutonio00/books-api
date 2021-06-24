@@ -22,7 +22,7 @@ func (h *Handler) initBooksRoutes(router *mux.Router) {
 // @Produce json
 // @Security ApiTokenAuth
 // @Success 200 {object} ApiResponse{result=[]model.Book}
-// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 400 {object} ApiResponse{result=string}
 // @Failure 500 {object} ApiResponse{result=string}
 // @Failure default {object} ApiResponse{result=string}
 // @Router /books/list [get]
@@ -49,7 +49,8 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 // @Security ApiTokenAuth
 // @Param id path integer true "Book's id"
 // @Success 200 {object} ApiResponse{result=model.Book}
-// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 400 {object} ApiResponse{result=string}
+// @Failure 404 {object} ApiResponse{result=string}
 // @Failure 500 {object} ApiResponse{result=string}
 // @Failure default {object} ApiResponse{result=string}
 // @Router /books/{id} [get]
@@ -57,18 +58,19 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	data, err := h.services.Books.FindById(id)
+	book, err := h.services.Books.FindById(id)
 
 	if err != nil {
-		if err == api_errors.ErrBookNotFound {
+		if book == nil {
 			jsonResponse(w, http.StatusNotFound, err.Error())
+			return
 		}
 
 		jsonResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, data)
+	jsonResponse(w, http.StatusOK, book)
 	return
 }
 
@@ -82,7 +84,8 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 // @Param release_year formData integer false "Book's release year"
 // @Param author_id formData integer false "Book's author"
 // @Success 200 {object} ApiResponse{result=string}
-// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 400 {object} ApiResponse{result=string}
+// @Failure 404 {object} ApiResponse{result=string}
 // @Failure 500 {object} ApiResponse{result=string}
 // @Failure default {object} ApiResponse{result=string}
 // @Router /books/update [post]
@@ -100,15 +103,15 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	keys, values := h.ParsePostParamsToKeyValueSlices(params)
 
 	values = append(values, id)
-	rowsAffected, err := h.services.Books.UpdateById(keys, values)
+	err := h.services.Books.UpdateById(keys, values)
 
 	if err != nil {
-    		jsonResponse(w, http.StatusInternalServerError, err.Error())
-    		return
-    	}
+		if err == api_errors.ErrBookNotFound {
+			jsonResponse(w, http.StatusNotFound, err.Error())
+			return
+		}
 
-	if rowsAffected == 0 {
-		jsonResponse(w, http.StatusNotFound, api_errors.ErrBookNotFound.Error())
+		jsonResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -123,7 +126,8 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 // @Security ApiTokenAuth
 // @Param id path integer true "Book's id"
 // @Success 200 {object} ApiResponse{result=string}
-// @Failure 400,404 {object} ApiResponse{result=string}
+// @Failure 400 {object} ApiResponse{result=string}
+// @Failure 404 {object} ApiResponse{result=string}
 // @Failure 500 {object} ApiResponse{result=string}
 // @Failure default {object} ApiResponse{result=string}
 // @Router /books/delete/{id} [delete]
@@ -136,6 +140,7 @@ func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
 			jsonResponse(w, http.StatusNotFound, err.Error())
+			return
 		}
 
 		jsonResponse(w, http.StatusInternalServerError, err.Error())
