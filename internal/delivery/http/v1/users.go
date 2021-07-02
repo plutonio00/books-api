@@ -2,8 +2,10 @@ package v1
 
 import (
 	"github.com/gorilla/mux"
-	api_errors "github.com/plutonio00/books-api/internal/error"
+// 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"net/http"
+	"github.com/gorilla/schema"
+	"github.com/plutonio00/books-api/internal/model/input"
 )
 
 func (h *Handler) initUsersRoutes(router *mux.Router) {
@@ -27,15 +29,22 @@ func (h *Handler) initUsersRoutes(router *mux.Router) {
 // @Router /users/sign-in [post]
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
+	var credentials input.UserCredentials
+	var decoder = schema.NewDecoder()
 
-	if email == "" || password == "" {
-		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
-		return
+	err := decoder.Decode(&credentials, r.PostForm)
+
+	if err != nil {
+	    jsonResponse(w, http.StatusInternalServerError, err.Error())
+    	return
 	}
 
-	data, err := h.services.Users.SignIn(email, password)
+// 	if email == "" || password == "" {
+// 		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
+// 		return
+// 	}
+
+	data, err := h.services.Users.SignIn(credentials)
 
 	if err != nil {
 		jsonResponse(w, http.StatusInternalServerError, err.Error())
@@ -59,15 +68,22 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 // @Router /users/sign-up [post]
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
+	var credentials input.UserCredentials
+    	var decoder = schema.NewDecoder()
 
-	if email == "" || password == "" {
-		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
-		return
-	}
+    	err := decoder.Decode(&credentials, r.PostForm)
 
-	err := h.services.Users.SignUp(email, password)
+    	if err != nil {
+    	    jsonResponse(w, http.StatusInternalServerError, err.Error())
+        	return
+    	}
+
+// 	if email == "" || password == "" {
+// 		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
+// 		return
+// 	}
+
+	err = h.services.Users.SignUp(credentials)
 
 	if err != nil {
 		jsonResponse(w, http.StatusInternalServerError, err.Error())

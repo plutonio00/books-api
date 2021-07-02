@@ -3,11 +3,12 @@ package repository
 import (
 	"database/sql"
 	"github.com/plutonio00/books-api/internal/model"
+	"github.com/plutonio00/books-api/internal/model/input"
 	mysqlRepos "github.com/plutonio00/books-api/internal/repository/mysql"
 )
 
 type Users interface {
-	Create(string, string) error
+	Create(input.UserCredentials) error
 	GetByEmail(string) (*model.User, error)
 }
 

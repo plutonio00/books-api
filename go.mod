@@ -12,6 +12,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect

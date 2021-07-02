@@ -2,6 +2,7 @@ package service
 
 import (
 	api_errors "github.com/plutonio00/books-api/internal/error"
+	"github.com/plutonio00/books-api/internal/model/input"
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/pkg/token"
 	"golang.org/x/crypto/bcrypt"
@@ -20,24 +21,25 @@ func NewUsersService(repo repository.Users, tokenManager *token.TokenManager) *U
 	}
 }
 
-func (s *UsersService) SignUp(email string, password string) error {
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+func (s *UsersService) SignUp(credentials input.UserCredentials) error {
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
 
 	if err != nil {
 		return err
 	}
 
-	return s.repo.Create(email, string(passwordHash))
+    credentials.Password = string(passwordHash)
+	return s.repo.Create(credentials)
 }
 
-func (s *UsersService) SignIn(email string, password string) (*Token, error) {
-	user, err := s.repo.GetByEmail(email)
+func (s *UsersService) SignIn(credentials input.UserCredentials) (*Token, error) {
+	user, err := s.repo.GetByEmail(credentials.Email)
 
 	if err != nil {
 		return nil, api_errors.ErrInvalidCredentials
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return nil, api_errors.ErrInvalidCredentials
 	}

@@ -5,6 +5,7 @@ import (
 	mysql_driver "github.com/go-sql-driver/mysql"
 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/plutonio00/books-api/internal/model"
+	"github.com/plutonio00/books-api/internal/model/input"
 )
 
 type UsersRepo struct {
@@ -19,11 +20,11 @@ func NewUsersRepo(db *sql.DB) *UsersRepo {
 	}
 }
 
-func (r *UsersRepo) Create(email string, passwordHash string) error {
+func (r *UsersRepo) Create(credentials input.UserCredentials) error {
 	qb := newQueryBuilder()
 	qb.Insert(r.tableName, []string{"email", "password"})
 
-	_, err := r.db.Exec(qb.Query, email, passwordHash)
+	_, err := r.db.Exec(qb.Query, credentials.Email, credentials.Password)
 
 	if err != nil {
 		if driverErr, ok := err.(*mysql_driver.MySQLError); ok {
