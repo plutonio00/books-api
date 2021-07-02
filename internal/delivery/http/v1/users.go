@@ -2,10 +2,10 @@ package v1
 
 import (
 	"github.com/gorilla/mux"
-// 	api_errors "github.com/plutonio00/books-api/internal/error"
-	"net/http"
+	// 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/gorilla/schema"
 	"github.com/plutonio00/books-api/internal/model/input"
+	"net/http"
 )
 
 func (h *Handler) initUsersRoutes(router *mux.Router) {
@@ -35,14 +35,16 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&credentials, r.PostForm)
 
 	if err != nil {
-	    jsonResponse(w, http.StatusInternalServerError, err.Error())
-    	return
+		jsonResponse(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 
-// 	if email == "" || password == "" {
-// 		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
-// 		return
-// 	}
+	err = credentials.Validate()
+
+	if err != nil {
+		jsonResponse(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	data, err := h.services.Users.SignIn(credentials)
 
@@ -69,19 +71,21 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	var credentials input.UserCredentials
-    	var decoder = schema.NewDecoder()
+	var decoder = schema.NewDecoder()
 
-    	err := decoder.Decode(&credentials, r.PostForm)
+	err := decoder.Decode(&credentials, r.PostForm)
 
-    	if err != nil {
-    	    jsonResponse(w, http.StatusInternalServerError, err.Error())
-        	return
-    	}
+	if err != nil {
+		jsonResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 
-// 	if email == "" || password == "" {
-// 		jsonResponse(w, http.StatusBadRequest, api_errors.ErrEmptyCredentials.Error())
-// 		return
-// 	}
+	err = credentials.Validate()
+
+	if err != nil {
+		jsonResponse(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	err = h.services.Users.SignUp(credentials)
 
@@ -92,5 +96,4 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	jsonResponse(w, http.StatusOK, "User was created successfully")
 	return
-
 }

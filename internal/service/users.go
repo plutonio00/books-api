@@ -28,7 +28,7 @@ func (s *UsersService) SignUp(credentials input.UserCredentials) error {
 		return err
 	}
 
-    credentials.Password = string(passwordHash)
+	credentials.Password = string(passwordHash)
 	return s.repo.Create(credentials)
 }
 
