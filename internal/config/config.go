@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"strings"
+	"strconv"
 )
 
 type (
@@ -24,7 +25,12 @@ type (
 	}
 
 	MySQLConfig struct {
-		URI string
+	    User string
+	    Password string
+	    Host string
+	    Port int
+	    DBName string
+		DSN string
 	}
 
 	TokenConfig struct {
@@ -88,7 +94,13 @@ func unmarshal(cfg *Config) error {
 }
 
 func setFromEnvFile(conf *Config) {
-	conf.Database.MySQL.URI = os.Getenv("MYSQL_URI")
+	conf.Database.MySQL.User = os.Getenv("MYSQL_USER")
+	conf.Database.MySQL.Password = os.Getenv("MYSQL_PASSWORD")
+	conf.Database.MySQL.Host = os.Getenv("MYSQL_HOST")
+	conf.Database.MySQL.Port, _ = strconv.Atoi(os.Getenv("MYSQL_PORT"))
+	conf.Database.MySQL.DBName = os.Getenv("MYSQL_DBNAME")
+	conf.Database.MySQL.DSN = os.Getenv("MYSQL_DSN")
+
 	conf.Token.JWT.SigningKey = os.Getenv("JWT_SIGNING_KEY")
 }
 
