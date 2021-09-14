@@ -51,18 +51,10 @@ func fixturesInit(conf *config.Config) {
         "--host",
         conf.Database.MySQL.Host)
 
-    var out bytes.Buffer
-    var stderr bytes.Buffer
-    cmd.Stdout = &out
-    cmd.Stderr = &stderr
      err := cmd.Run()
 
      if err != nil {
-         //panic(err)
-         fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+         panic(err)
          return
      }
 }
-
-//goose -dir internal/migration mysql "books_user:books_pass@tcp(mysql-books:3306)/books_db?parseTime=true"  up
-//charlatan load ./tests/fixtures -u=books_user -d=books_db -p=books_pass --host=mysql-books
