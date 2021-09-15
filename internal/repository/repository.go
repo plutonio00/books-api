@@ -3,7 +3,6 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/plutonio00/books-api/internal/model"
-	mysqlRepos "github.com/plutonio00/books-api/internal/repository/mysql"
 )
 
 type Users interface {
@@ -14,7 +13,7 @@ type Users interface {
 type Books interface {
 	FindById(id string) (*model.Book, error)
 	GetBooksList() ([]model.Book, error)
-	DeleteById(string) error
+	DeleteById(int) error
 	Update(*model.Book) error
 }
 
@@ -29,8 +28,8 @@ type Repositories struct {
 
 func NewRepositories(db *gorm.DB) *Repositories {
 	return &Repositories{
-		Books:   mysqlRepos.NewBooksRepo(db),
-		Authors: mysqlRepos.NewAuthorsRepo(db),
-		Users:   mysqlRepos.NewUsersRepo(db),
+		Books:   NewBooksRepo(db),
+		Authors: NewAuthorsRepo(db),
+		Users:   NewUsersRepo(db),
 	}
 }

@@ -2,10 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	mysql_driver "github.com/go-sql-driver/mysql"
-	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/plutonio00/books-api/internal/model"
-	"github.com/plutonio00/books-api/internal/model/input"
 )
 
 type UsersRepo struct {
@@ -20,9 +17,22 @@ func NewUsersRepo(db *gorm.DB) *UsersRepo {
 }
 
 func (r *UsersRepo) Create(user *model.User) error {
+    result := r.db.Create(user)
 
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
 }
 
 func (r *UsersRepo) GetByEmail(email string) (*model.User, error) {
+    user := &model.User{}
+    result := r.db.Where("email = ?", email).Find(user)
 
+    if result.Error != nil {
+        return nil, result.Error
+    }
+
+    return user, nil
 }

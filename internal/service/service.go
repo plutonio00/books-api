@@ -18,7 +18,7 @@ type Users interface {
 type Books interface {
 	FindById(id string) (*model.Book, error)
 	GetBooksList() ([]model.Book, error)
-	DeleteById(string) error
+	DeleteById(int) error
 	Update(*model.Book) error
 }
 

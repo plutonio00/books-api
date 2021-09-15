@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"github.com/plutonio00/books-api/internal/model"
 	"github.com/gorilla/schema"
+	"strconv"
 )
 
 func (h *Handler) initBooksRoutes(router *mux.Router) {
@@ -103,14 +104,14 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = book.Validate()
+    //err = book.Validate()
 
-    if err != nil {
-        jsonResponse(w, http.StatusBadRequest, err.Error())
-        return
-    }
+//     if err != nil {
+//         jsonResponse(w, http.StatusBadRequest, err.Error())
+//         return
+//     }
 
-    err := h.services.Books.Update(&book)
+    err = h.services.Books.Update(&book)
 
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
@@ -140,9 +141,14 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 // @Router /books/delete/{id} [delete]
 func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id, err := strconv.Atoi(vars["id"])
 
-	err := h.services.Books.DeleteById(id)
+	if err != nil {
+	    jsonResponse(w, http.StatusBadRequest, err.Error())
+        return
+	}
+
+	err = h.services.Books.DeleteById(id)
 
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {

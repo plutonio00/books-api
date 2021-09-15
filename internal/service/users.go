@@ -22,24 +22,24 @@ func NewUsersService(repo repository.Users, tokenManager *token.TokenManager) *U
 }
 
 func (s *UsersService) SignUp(user *model.User) error {
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 
 	if err != nil {
 		return err
 	}
 
-	credentials.Password = string(passwordHash)
-	return s.repo.Create(credentials)
+	user.Password = string(passwordHash)
+	return s.repo.Create(user)
 }
 
 func (s *UsersService) SignIn(user *model.User) (*Token, error) {
-	user, err := s.repo.GetByEmail(credentials.Email)
+	user, err := s.repo.GetByEmail(user.Email)
 
 	if err != nil {
 		return nil, api_errors.ErrInvalidCredentials
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(user.Password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return nil, api_errors.ErrInvalidCredentials
 	}

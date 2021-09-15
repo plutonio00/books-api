@@ -23,7 +23,7 @@ func (s *BooksService) GetBooksList() ([]model.Book, error) {
 	return s.repo.GetBooksList()
 }
 
-func (s *BooksService) DeleteById(id string) error {
+func (s *BooksService) DeleteById(id int) error {
 	return s.repo.DeleteById(id)
 }
 

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/plutonio00/books-api/internal/model"
 )
 
@@ -18,18 +17,44 @@ func NewBooksRepo(db *gorm.DB) *BooksRepo {
 }
 
 func (r *BooksRepo) FindById(id string) (*model.Book, error) {
+     book := &model.Book{}
+     result := r.db.First(book)
 
+     if result.Error != nil {
+         return nil, result.Error
+     }
+
+     return book, nil
 }
 
 func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
+    books := []model.Book{}
+    result := r.db.Find(&books)
 
+    if result.Error != nil {
+       return nil, result.Error
+    }
+
+    return books, nil
 }
 
-func (r *BooksRepo) DeleteById(id string) error {
+func (r *BooksRepo) DeleteById(id int) error {
+    result := r.db.Delete(&model.Book{}, id)
 
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
 }
 
-func (r *BooksRepo) Update(*model.Book) error {
+func (r *BooksRepo) Update(book *model.Book) error {
+    result := r.db.Model(book).Updates(book)
 
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
 }
 
