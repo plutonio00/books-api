@@ -19,7 +19,7 @@ func NewBooksRepo(db *gorm.DB) *BooksRepo {
 
 func (r *BooksRepo) FindById(id int) (*model.Book, error) {
 	book := &model.Book{}
-	result := r.db.Where("id = ?", id).Find(book)
+	result := r.db.Preload("Author").Find(&book, id)
 
 	if result.RowsAffected == 0 {
 		return nil, api_errors.ErrBookNotFound
@@ -34,7 +34,7 @@ func (r *BooksRepo) FindById(id int) (*model.Book, error) {
 
 func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
 	books := []model.Book{}
-	result := r.db.Find(&books)
+	result := r.db.Preload("Author").Find(&books)
 
 	if result.Error != nil {
 		return nil, result.Error
