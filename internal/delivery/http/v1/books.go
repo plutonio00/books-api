@@ -3,10 +3,10 @@ package v1
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	api_errors "github.com/plutonio00/books-api/internal/error"
-	"net/http"
-	"github.com/plutonio00/books-api/internal/model"
 	"github.com/gorilla/schema"
+	api_errors "github.com/plutonio00/books-api/internal/error"
+	"github.com/plutonio00/books-api/internal/model"
+	"net/http"
 	"strconv"
 )
 
@@ -93,25 +93,25 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 // @Failure default {object} ApiResponse{result=string}
 // @Router /books/update [post]
 func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
-    r.ParseMultipartForm(0)
-    var book model.Book
-    var decoder = schema.NewDecoder()
+	r.ParseMultipartForm(0)
+	var book model.Book
+	var decoder = schema.NewDecoder()
 
-    err := decoder.Decode(&book, r.PostForm)
+	err := decoder.Decode(&book, r.PostForm)
 
-    if err != nil {
-        jsonResponse(w, http.StatusInternalServerError, err.Error())
-        return
-    }
+	if err != nil {
+		jsonResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 
-    //err = book.Validate()
+	//err = book.Validate()
 
-//     if err != nil {
-//         jsonResponse(w, http.StatusBadRequest, err.Error())
-//         return
-//     }
+	//     if err != nil {
+	//         jsonResponse(w, http.StatusBadRequest, err.Error())
+	//         return
+	//     }
 
-    err = h.services.Books.Update(&book)
+	err = h.services.Books.Update(&book)
 
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
@@ -144,8 +144,8 @@ func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(vars["id"])
 
 	if err != nil {
-	    jsonResponse(w, http.StatusBadRequest, err.Error())
-        return
+		jsonResponse(w, http.StatusBadRequest, err.Error())
+		return
 	}
 
 	err = h.services.Books.DeleteById(id)

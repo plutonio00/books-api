@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"github.com/plutonio00/books-api/internal/model"
+	"gorm.io/gorm"
 )
 
 type BooksRepo struct {
@@ -12,49 +12,48 @@ type BooksRepo struct {
 
 func NewBooksRepo(db *gorm.DB) *BooksRepo {
 	return &BooksRepo{
-		db:        db,
+		db: db,
 	}
 }
 
 func (r *BooksRepo) FindById(id string) (*model.Book, error) {
-     book := &model.Book{}
-     result := r.db.First(book)
+	book := &model.Book{}
+	result := r.db.First(book)
 
-     if result.Error != nil {
-         return nil, result.Error
-     }
+	if result.Error != nil {
+		return nil, result.Error
+	}
 
-     return book, nil
+	return book, nil
 }
 
 func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
-    books := []model.Book{}
-    result := r.db.Find(&books)
+	books := []model.Book{}
+	result := r.db.Find(&books)
 
-    if result.Error != nil {
-       return nil, result.Error
-    }
+	if result.Error != nil {
+		return nil, result.Error
+	}
 
-    return books, nil
+	return books, nil
 }
 
 func (r *BooksRepo) DeleteById(id int) error {
-    result := r.db.Delete(&model.Book{}, id)
+	result := r.db.Delete(&model.Book{}, id)
 
-    if result.Error != nil {
-        return result.Error
-    }
+	if result.Error != nil {
+		return result.Error
+	}
 
-    return nil
+	return nil
 }
 
 func (r *BooksRepo) Update(book *model.Book) error {
-    result := r.db.Model(book).Updates(book)
+	result := r.db.Model(book).Updates(book)
 
-    if result.Error != nil {
-        return result.Error
-    }
+	if result.Error != nil {
+		return result.Error
+	}
 
-    return nil
+	return nil
 }
-

@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"github.com/plutonio00/books-api/internal/model"
+	"gorm.io/gorm"
 )
 
 type Users interface {

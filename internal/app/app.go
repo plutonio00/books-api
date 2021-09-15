@@ -10,12 +10,12 @@ import (
 	"github.com/plutonio00/books-api/internal/service"
 	"github.com/plutonio00/books-api/pkg/token"
 	logger "github.com/sirupsen/logrus"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"gorm.io/driver/mysql"
-    "gorm.io/gorm"
 )
 
 func Run(configPath string) {
