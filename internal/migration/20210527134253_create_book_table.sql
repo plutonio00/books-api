@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE `book`
+CREATE TABLE `books`
 (
     id  INT AUTO_INCREMENT PRIMARY KEY,
     title        VARCHAR(100) NOT NULL,
@@ -11,5 +11,5 @@ CREATE TABLE `book`
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE `book`;
+DROP TABLE `books`;
 -- +goose StatementEnd

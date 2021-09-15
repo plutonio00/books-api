@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE `author`
+CREATE TABLE `authors`
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(40) NOT NULL,
@@ -12,5 +12,5 @@ CREATE TABLE `author`
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE `author`;
+DROP TABLE `authors`;
 -- +goose StatementEnd
