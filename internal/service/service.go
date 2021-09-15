@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/plutonio00/books-api/internal/model"
-	"github.com/plutonio00/books-api/internal/model/input"
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/pkg/token"
 )
@@ -12,15 +11,15 @@ type Token struct {
 }
 
 type Users interface {
-	SignUp(input.UserCredentials) error
-	SignIn(input.UserCredentials) (*Token, error)
+	SignUp(*model.User) error
+	SignIn(*model.User) (*Token, error)
 }
 
 type Books interface {
 	FindById(id string) (*model.Book, error)
 	GetBooksList() ([]model.Book, error)
 	DeleteById(string) error
-	UpdateById([]string, []interface{}) error
+	Update(*model.Book) error
 }
 
 type Authors interface {

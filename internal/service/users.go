@@ -2,7 +2,7 @@ package service
 
 import (
 	api_errors "github.com/plutonio00/books-api/internal/error"
-	"github.com/plutonio00/books-api/internal/model/input"
+	"github.com/plutonio00/books-api/internal/model"
 	"github.com/plutonio00/books-api/internal/repository"
 	"github.com/plutonio00/books-api/pkg/token"
 	"golang.org/x/crypto/bcrypt"
@@ -21,7 +21,7 @@ func NewUsersService(repo repository.Users, tokenManager *token.TokenManager) *U
 	}
 }
 
-func (s *UsersService) SignUp(credentials input.UserCredentials) error {
+func (s *UsersService) SignUp(user *model.User) error {
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
 
 	if err != nil {
@@ -32,7 +32,7 @@ func (s *UsersService) SignUp(credentials input.UserCredentials) error {
 	return s.repo.Create(credentials)
 }
 
-func (s *UsersService) SignIn(credentials input.UserCredentials) (*Token, error) {
+func (s *UsersService) SignIn(user *model.User) (*Token, error) {
 	user, err := s.repo.GetByEmail(credentials.Email)
 
 	if err != nil {

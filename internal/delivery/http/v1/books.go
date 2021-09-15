@@ -5,6 +5,8 @@ import (
 	"github.com/gorilla/mux"
 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"net/http"
+	"github.com/plutonio00/books-api/internal/model"
+	"github.com/gorilla/schema"
 )
 
 func (h *Handler) initBooksRoutes(router *mux.Router) {
@@ -90,20 +92,25 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 // @Failure default {object} ApiResponse{result=string}
 // @Router /books/update [post]
 func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
-	r.ParseMultipartForm(0)
-	params := r.Form
+    r.ParseMultipartForm(0)
+    var book model.Book
+    var decoder = schema.NewDecoder()
 
-	id := r.Form.Get("id")
+    err := decoder.Decode(&book, r.PostForm)
 
-	if id == "" {
-		jsonResponse(w, http.StatusBadRequest, "Missing mandatory parameter 'id'")
-		return
-	}
+    if err != nil {
+        jsonResponse(w, http.StatusInternalServerError, err.Error())
+        return
+    }
 
-	keys, values := h.ParsePostParamsToKeyValueSlices(params)
+    err = book.Validate()
 
-	values = append(values, id)
-	err := h.services.Books.UpdateById(keys, values)
+    if err != nil {
+        jsonResponse(w, http.StatusBadRequest, err.Error())
+        return
+    }
+
+    err := h.services.Books.Update(&book)
 
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
