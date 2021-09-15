@@ -83,8 +83,8 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 // @Security ApiTokenAuth
 // @Param id formData integer true "Book's id"
 // @Param title formData string false "Book's title"
-// @Param release_year formData integer false "Book's release year"
-// @Param author_id formData integer false "Book's author"
+// @Param releaseYear formData integer false "Book's release year"
+// @Param authorId formData integer false "Book's author"
 // @Success 200 {object} ApiResponse{result=string}
 // @Failure 400 {object} ApiResponse{result=string}
 // @Failure 404 {object} ApiResponse{result=string}
