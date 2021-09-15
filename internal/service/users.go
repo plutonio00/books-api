@@ -32,14 +32,14 @@ func (s *UsersService) SignUp(user *model.User) error {
 	return s.repo.Create(user)
 }
 
-func (s *UsersService) SignIn(user *model.User) (*Token, error) {
-	user, err := s.repo.GetByEmail(user.Email)
+func (s *UsersService) SignIn(userInput *model.User) (*Token, error) {
+	user, err := s.repo.GetByEmail(userInput.Email)
 
 	if err != nil {
 		return nil, api_errors.ErrInvalidCredentials
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(user.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userInput.Password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return nil, api_errors.ErrInvalidCredentials
 	}
