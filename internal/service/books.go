@@ -15,7 +15,7 @@ func NewBooksService(repo repository.Books) *BooksService {
 	}
 }
 
-func (s *BooksService) FindById(id string) (*model.Book, error) {
+func (s *BooksService) FindById(id int) (*model.Book, error) {
 	return s.repo.FindById(id)
 }
 

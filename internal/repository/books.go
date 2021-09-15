@@ -1,6 +1,7 @@
 package repository
 
 import (
+	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/plutonio00/books-api/internal/model"
 	"gorm.io/gorm"
 )
@@ -16,9 +17,13 @@ func NewBooksRepo(db *gorm.DB) *BooksRepo {
 	}
 }
 
-func (r *BooksRepo) FindById(id string) (*model.Book, error) {
+func (r *BooksRepo) FindById(id int) (*model.Book, error) {
 	book := &model.Book{}
-	result := r.db.First(book)
+	result := r.db.Where("id = ?", id).Find(book)
+
+	if result.RowsAffected == 0 {
+		return nil, api_errors.ErrBookNotFound
+	}
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -41,6 +46,10 @@ func (r *BooksRepo) GetBooksList() ([]model.Book, error) {
 func (r *BooksRepo) DeleteById(id int) error {
 	result := r.db.Delete(&model.Book{}, id)
 
+	if result.RowsAffected == 0 {
+		return api_errors.ErrBookNotFound
+	}
+
 	if result.Error != nil {
 		return result.Error
 	}
@@ -50,6 +59,10 @@ func (r *BooksRepo) DeleteById(id int) error {
 
 func (r *BooksRepo) Update(book *model.Book) error {
 	result := r.db.Model(book).Updates(book)
+
+	if result.RowsAffected == 0 {
+		return api_errors.ErrBookNotFound
+	}
 
 	if result.Error != nil {
 		return result.Error

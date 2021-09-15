@@ -59,8 +59,7 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 // @Router /books/{id} [get]
 func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
-
+	id, _ := strconv.Atoi(vars["id"])
 	book, err := h.services.Books.FindById(id)
 
 	if err != nil {
@@ -141,14 +140,8 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 // @Router /books/delete/{id} [delete]
 func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-
-	if err != nil {
-		jsonResponse(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	err = h.services.Books.DeleteById(id)
+	id, _ := strconv.Atoi(vars["id"])
+	err := h.services.Books.DeleteById(id)
 
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
@@ -160,6 +153,6 @@ func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, fmt.Sprintf("Book with id %s deleted", id))
+	jsonResponse(w, http.StatusOK, fmt.Sprintf("Book with id %d was deleted", id))
 	return
 }

@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gorilla/mux"
-	// 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"github.com/gorilla/schema"
 	"github.com/plutonio00/books-api/internal/model"
 	"net/http"
