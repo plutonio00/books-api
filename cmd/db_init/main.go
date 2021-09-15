@@ -3,8 +3,6 @@ package main
 import (
     "github.com/plutonio00/books-api/internal/config"
     "os/exec"
-    "bytes"
-    "fmt"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"strings"
-	"strconv"
+	"fmt"
 )
 
 type (
@@ -28,7 +28,7 @@ type (
 	    User string
 	    Password string
 	    Host string
-	    Port int
+	    Port string
 	    DBName string
 		DSN string
 	}
@@ -97,9 +97,15 @@ func setFromEnvFile(conf *Config) {
 	conf.Database.MySQL.User = os.Getenv("MYSQL_USER")
 	conf.Database.MySQL.Password = os.Getenv("MYSQL_PASSWORD")
 	conf.Database.MySQL.Host = os.Getenv("MYSQL_HOST")
-	conf.Database.MySQL.Port, _ = strconv.Atoi(os.Getenv("MYSQL_PORT"))
+	conf.Database.MySQL.Port = os.Getenv("MYSQL_PORT")
 	conf.Database.MySQL.DBName = os.Getenv("MYSQL_DBNAME")
-	conf.Database.MySQL.DSN = os.Getenv("MYSQL_DSN")
+	conf.Database.MySQL.DSN = fmt.Sprintf(
+	    "%s:%s@tcp(%s:%s)/%s?parseTime=true",
+	    conf.Database.MySQL.User,
+	    conf.Database.MySQL.Password,
+	    conf.Database.MySQL.Host,
+	    conf.Database.MySQL.Port,
+	    conf.Database.MySQL.DBName)
 
 	conf.Token.JWT.SigningKey = os.Getenv("JWT_SIGNING_KEY")
 }
