@@ -34,7 +34,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&user, r.PostForm)
 
 	if err != nil {
-		jsonResponse(w, http.StatusInternalServerError, err.Error())
+		jsonResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -75,7 +75,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&user, r.PostForm)
 
 	if err != nil {
-		jsonResponse(w, http.StatusInternalServerError, err.Error())
+		jsonResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

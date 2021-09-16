@@ -99,16 +99,16 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&book, r.PostForm)
 
 	if err != nil {
-		jsonResponse(w, http.StatusInternalServerError, err.Error())
+		jsonResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	//err = book.Validate()
+	err = book.Validate()
 
-	//     if err != nil {
-	//         jsonResponse(w, http.StatusBadRequest, err.Error())
-	//         return
-	//     }
+	if err != nil {
+	    jsonResponse(w, http.StatusBadRequest, err.Error())
+	    return
+	}
 
 	err = h.services.Books.Update(&book)
 

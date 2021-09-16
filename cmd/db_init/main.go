@@ -25,7 +25,8 @@ func migrateInit(conf *config.Config) {
 		"internal/migration",
 		"mysql",
 		conf.Database.MySQL.DSN,
-		"up")
+		"up",
+	)
 
 	err := cmd.Run()
 
@@ -47,7 +48,8 @@ func fixturesInit(conf *config.Config) {
 		"-p",
 		conf.Database.MySQL.Password,
 		"--host",
-		conf.Database.MySQL.Host)
+		conf.Database.MySQL.Host,
+    )
 
 	err := cmd.Run()
 
