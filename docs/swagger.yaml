@@ -5,6 +5,10 @@ definitions:
       birth_date:
         example: "1948-09-20"
         type: string
+      books:
+        items:
+          $ref: '#/definitions/model.Book'
+        type: array
       first_name:
         example: George
         type: string
@@ -239,11 +243,11 @@ paths:
         type: string
       - description: Book's release year
         in: formData
-        name: release_year
+        name: releaseYear
         type: integer
       - description: Book's author
         in: formData
-        name: author_id
+        name: authorId
         type: integer
       produces:
       - application/json

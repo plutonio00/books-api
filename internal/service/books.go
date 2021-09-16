@@ -15,7 +15,7 @@ func NewBooksService(repo repository.Books) *BooksService {
 	}
 }
 
-func (s *BooksService) FindById(id string) (*model.Book, error) {
+func (s *BooksService) FindById(id int) (*model.Book, error) {
 	return s.repo.FindById(id)
 }
 
@@ -23,10 +23,10 @@ func (s *BooksService) GetBooksList() ([]model.Book, error) {
 	return s.repo.GetBooksList()
 }
 
-func (s *BooksService) DeleteById(id string) error {
+func (s *BooksService) DeleteById(id int) error {
 	return s.repo.DeleteById(id)
 }
 
-func (s *BooksService) UpdateById(keys []string, values []interface{}) error {
-	return s.repo.UpdateById(keys, values)
+func (s *BooksService) Update(book *model.Book) error {
+	return s.repo.Update(book)
 }

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"os"
@@ -24,7 +25,12 @@ type (
 	}
 
 	MySQLConfig struct {
-		URI string
+		User     string
+		Password string
+		Host     string
+		Port     string
+		DBName   string
+		DSN      string
 	}
 
 	TokenConfig struct {
@@ -88,7 +94,19 @@ func unmarshal(cfg *Config) error {
 }
 
 func setFromEnvFile(conf *Config) {
-	conf.Database.MySQL.URI = os.Getenv("MYSQL_URI")
+	conf.Database.MySQL.User = os.Getenv("MYSQL_USER")
+	conf.Database.MySQL.Password = os.Getenv("MYSQL_PASSWORD")
+	conf.Database.MySQL.Host = os.Getenv("MYSQL_HOST")
+	conf.Database.MySQL.Port = os.Getenv("MYSQL_PORT")
+	conf.Database.MySQL.DBName = os.Getenv("MYSQL_DBNAME")
+	conf.Database.MySQL.DSN = fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		conf.Database.MySQL.User,
+		conf.Database.MySQL.Password,
+		conf.Database.MySQL.Host,
+		conf.Database.MySQL.Port,
+		conf.Database.MySQL.DBName)
+
 	conf.Token.JWT.SigningKey = os.Getenv("JWT_SIGNING_KEY")
 }
 

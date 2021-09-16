@@ -1,7 +1,6 @@
 package app
 
 import (
-	"database/sql"
 	"errors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/plutonio00/books-api/internal/config"
@@ -11,6 +10,8 @@ import (
 	"github.com/plutonio00/books-api/internal/service"
 	"github.com/plutonio00/books-api/pkg/token"
 	logger "github.com/sirupsen/logrus"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"net/http"
 	"os"
 	"os/signal"
@@ -25,14 +26,9 @@ func Run(configPath string) {
 		return
 	}
 
-	db, err := sql.Open("mysql", conf.Database.MySQL.URI)
+	db, err := gorm.Open(mysql.Open(conf.Database.MySQL.DSN), &gorm.Config{})
 
 	if err != nil {
-		logger.Error(err)
-		return
-	}
-
-	if err := db.Ping(); err != nil {
 		logger.Error(err)
 		return
 	}

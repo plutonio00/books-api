@@ -252,13 +252,13 @@
                     {
                         "type": "integer",
                         "description": "Book's release year",
-                        "name": "release_year",
+                        "name": "releaseYear",
                         "in": "formData"
                     },
                     {
                         "type": "integer",
                         "description": "Book's author",
-                        "name": "author_id",
+                        "name": "authorId",
                         "in": "formData"
                     }
                 ],
@@ -704,6 +704,12 @@
                 "birth_date": {
                     "type": "string",
                     "example": "1948-09-20"
+                },
+                "books": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Book"
+                    }
                 },
                 "first_name": {
                     "type": "string",

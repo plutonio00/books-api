@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	// 	"errors"
 	api_errors "github.com/plutonio00/books-api/internal/error"
 	"net/http"
 	"strings"
@@ -38,18 +37,15 @@ func (h *Handler) parseAuthHeader(w http.ResponseWriter, r *http.Request) (strin
 	header := r.Header.Get(authorizationHeader)
 	if header == "" {
 		return "", api_errors.ErrUnauthorized
-		// 		return "", errors.New("Empty auth header")
 	}
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
 		return "", api_errors.ErrUnauthorized
-		// 		return "", errors.New("Invalid auth header")
 	}
 
 	if len(headerParts[1]) == 0 {
 		return "", api_errors.ErrUnauthorized
-		// 		return "", errors.New("Token is empty")
 	}
 
 	return headerParts[1], nil

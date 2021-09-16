@@ -1,15 +1,15 @@
 -- +goose Up
 -- +goose StatementBegin
-ALTER TABLE `book`
-ADD CONSTRAINT fk_book_author
+ALTER TABLE `books`
+ADD CONSTRAINT fk_authors_books
 foreign key (author_id)
-references author (id)
+references authors (id)
 ON UPDATE RESTRICT
 ON DELETE RESTRICT;
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-ALTER TABLE `book`
-DROP FOREIGN KEY `fk_book_author`
+ALTER TABLE `books`
+DROP FOREIGN KEY `fk_authors_books`
 -- +goose StatementEnd

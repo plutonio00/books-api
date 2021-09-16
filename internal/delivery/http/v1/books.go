@@ -3,8 +3,11 @@ package v1
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 	api_errors "github.com/plutonio00/books-api/internal/error"
+	"github.com/plutonio00/books-api/internal/model"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) initBooksRoutes(router *mux.Router) {
@@ -56,8 +59,7 @@ func (h *Handler) getBooksList(w http.ResponseWriter, r *http.Request) {
 // @Router /books/{id} [get]
 func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
-
+	id, _ := strconv.Atoi(vars["id"])
 	book, err := h.services.Books.FindById(id)
 
 	if err != nil {
@@ -81,8 +83,8 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 // @Security ApiTokenAuth
 // @Param id formData integer true "Book's id"
 // @Param title formData string false "Book's title"
-// @Param release_year formData integer false "Book's release year"
-// @Param author_id formData integer false "Book's author"
+// @Param releaseYear formData integer false "Book's release year"
+// @Param authorId formData integer false "Book's author"
 // @Success 200 {object} ApiResponse{result=string}
 // @Failure 400 {object} ApiResponse{result=string}
 // @Failure 404 {object} ApiResponse{result=string}
@@ -91,19 +93,24 @@ func (h *Handler) getBookById(w http.ResponseWriter, r *http.Request) {
 // @Router /books/update [post]
 func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
-	params := r.Form
+	var book model.Book
+	var decoder = schema.NewDecoder()
 
-	id := r.Form.Get("id")
+	err := decoder.Decode(&book, r.PostForm)
 
-	if id == "" {
-		jsonResponse(w, http.StatusBadRequest, "Missing mandatory parameter 'id'")
+	if err != nil {
+		jsonResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	keys, values := h.ParsePostParamsToKeyValueSlices(params)
+	err = book.Validate()
 
-	values = append(values, id)
-	err := h.services.Books.UpdateById(keys, values)
+	if err != nil {
+	    jsonResponse(w, http.StatusBadRequest, err.Error())
+	    return
+	}
+
+	err = h.services.Books.Update(&book)
 
 	if err != nil {
 		if err == api_errors.ErrBookNotFound {
@@ -133,8 +140,7 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request) {
 // @Router /books/delete/{id} [delete]
 func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
-
+	id, _ := strconv.Atoi(vars["id"])
 	err := h.services.Books.DeleteById(id)
 
 	if err != nil {
@@ -147,6 +153,6 @@ func (h *Handler) deleteBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, fmt.Sprintf("Book with id %s deleted", id))
+	jsonResponse(w, http.StatusOK, fmt.Sprintf("Book with id %d was deleted", id))
 	return
 }

@@ -1,11 +1,11 @@
-author:
+authors:
   author_{1..10}:
     first_name: '<FirstName()>'
     last_name: '<LastName()>'
     is_male: '<Bool()>'
     birth_date: '1980-02-02' #todo: generate date
 
-book:
+books:
   book_{1..10}:
     title: '<Word()>'
     release_year: '<Year()>'

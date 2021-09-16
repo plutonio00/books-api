@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE `user`
+CREATE TABLE `users`
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email         VARCHAR(200) NOT NULL,
@@ -11,5 +11,5 @@ CREATE TABLE `user`
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE `user`;
+DROP TABLE `users`;
 -- +goose StatementEnd
